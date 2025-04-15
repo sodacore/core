@@ -1,0 +1,69 @@
+{
+	"name": "@sodacore/blockchain",
+	"description": "Sodacore blockchain is a very simplistic design of a blockchain technology that can be used privately to store data in a secure and tamper-proof way.",
+	"version": "0.3.11",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": true,
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"blockchain",
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"blockchain",
+		"cryotography",
+		"hash",
+		"hashing",
+		"secure",
+		"tamper-proof"
+	],
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"engines": {
+		"bun": ">=1.0.30"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/blockchain"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.9"
+	},
+	"peerDependencies": {
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@sodacore/core": "workspace:*",
+		"@sodacore/di": "workspace:*",
+		"@sodacore/http": "workspace:*",
+		"@types/elliptic": "^6.4.18",
+		"elliptic": "^6.6.1",
+		"reflect-metadata": "^0.2.2"
+	}
+}

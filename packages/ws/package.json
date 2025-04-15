@@ -1,0 +1,66 @@
+{
+	"name": "@sodacore/ws",
+	"description": "Sodacore ws is a core plugin that extends the Http plugin offering WebSocket support to the Sodacore framework.",
+	"version": "0.3.22",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"ws",
+		"wss",
+		"websocket",
+		"websockets"
+	],
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"engines": {
+		"bun": ">=1.0.30"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/ws"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"@sodacore/core": "workspace:*",
+		"@sodacore/di": "workspace:*",
+		"@sodacore/http": "workspace:*",
+		"@sodacore/registry": "workspace:*",
+		"reflect-metadata": "^0.2.1",
+		"uuid": "^11.0.2"
+	}
+}

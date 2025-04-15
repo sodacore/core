@@ -1,0 +1,38 @@
+{
+	"name": "@sodacore/monorepo",
+	"version": "0.3.22",
+	"module": "false",
+	"dependencies": {
+		"bun": "^1.2.9",
+		"chalk": "^5.4.1"
+	},
+	"devDependencies": {
+		"@antfu/eslint-config": "^4.12.0",
+		"@types/bun": "^1.2.9",
+		"@types/common-tags": "^1.8.4",
+		"@types/node": "^22.14.1",
+		"bun-plugin-dts": "^0.3.0",
+		"eslint": "^9.24.0",
+		"eslint-plugin-format": "^1.0.1",
+		"typescript": "^5.8.3"
+	},
+	"private": true,
+	"scripts": {
+		"dev": "cd packages/integration && bun dev",
+		"lint": "bunx eslint packages/**/src/*.ts",
+		"lint:fix": "bunx eslint packages/**/src/*.ts --fix",
+		"build:registry": "cd packages/registry && bun run build",
+		"build:di": "cd packages/di && bun run build",
+		"build:core": "cd packages/core && bun run build",
+		"build:http": "cd packages/http && bun run build",
+		"build:ws": "cd packages/ws && bun run build",
+		"build:health": "cd packages/health && bun run build",
+		"build:all": "bun run build:registry && bun run build:di && bun run build:core && bun run build:http && bun run build:ws && bun run build:health",
+		"script": "bun ./scripts/init.ts",
+		"updates": "npm-check-updates -i"
+	},
+	"type": "module",
+	"workspaces": [
+		"packages/*"
+	]
+}

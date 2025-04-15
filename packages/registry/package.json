@@ -1,0 +1,60 @@
+{
+	"name": "@sodacore/registry",
+	"description": "Sodacore registry is a core framework module for providing an available registry.",
+	"version": "0.3.22",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"registry",
+		"kv",
+		"storage"
+	],
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/registry"
+	},
+	"engines": {
+		"bun": ">=1.1.20"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"reflect-metadata": "^0.2.2"
+	}
+}

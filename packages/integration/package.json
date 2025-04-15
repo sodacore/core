@@ -1,0 +1,57 @@
+{
+	"name": "@sodacore/integration",
+	"description": "Sodacore internal package for testing the framework features, you can use this to see examples of every feature offered.",
+	"version": "0.3.11",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": true,
+	"publishConfig": {
+		"access": "restricted"
+	},
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"engines": {
+		"bun": ">=1.0.30"
+	},
+	"scripts": {
+		"dev": "bun run src/index.ts --target=bun",
+		"build": "bun build src/index.ts --outdir ./dist --target=bun"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/integration"
+	},
+	"dependencies": {
+		"@sodacore/blockchain": "workspace:*",
+		"@sodacore/core": "workspace:*",
+		"@sodacore/di": "workspace:*",
+		"@sodacore/discord": "workspace:*",
+		"@sodacore/http": "workspace:*",
+		"@sodacore/registry": "workspace:*",
+		"@sodacore/prisma": "workspace:*",
+		"@sodacore/ws": "workspace:*",
+		"@sodacore/cli": "workspace:*",
+		"discord.js": "^15.0.0-dev.1741392619-ab6a69401",
+		"uuid": "^11.0.2"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.6.3"
+	}
+}

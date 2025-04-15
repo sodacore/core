@@ -1,0 +1,61 @@
+{
+	"name": "@sodacore/di",
+	"description": "Sodacore dependency injection is a core module for the Sodacore framework offering dependecy injection support.",
+	"version": "0.3.22",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"dependency",
+		"injection",
+		"di"
+	],
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"scripts": {
+		"build": "rm -rf dist; tsc"
+	},
+	"engines": {
+		"bun": ">=1.0.30"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/di"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"@sodacore/registry": "workspace:*",
+		"reflect-metadata": "^0.2.1"
+	}
+}

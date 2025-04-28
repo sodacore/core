@@ -34,9 +34,9 @@
 		// Decorators.
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"useDefineForClassFields": false,
+		"useDefineForClassFields": false
 	},
 	"include": [
-		"src/**/*.ts",
+		"src/**/*.ts"
 	]
 }

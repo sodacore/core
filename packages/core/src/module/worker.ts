@@ -20,7 +20,7 @@ export default class WorkerWrapper {
 	public constructor(
 		protected filename: string,
 	) {
-		self.on('message', event => {
+		self.addEventListener('message', event => {
 			this.handleIpc.bind(this)(event.data);
 		});
 	}

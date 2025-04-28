@@ -36,7 +36,6 @@
 		"directory": "packages/integration"
 	},
 	"dependencies": {
-		"@sodacore/blockchain": "workspace:*",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/discord": "workspace:*",
@@ -45,6 +44,7 @@
 		"@sodacore/prisma": "workspace:*",
 		"@sodacore/ws": "workspace:*",
 		"@sodacore/cli": "workspace:*",
+		"@sodacore/ui": "workspace:*",
 		"discord.js": "^15.0.0-dev.1741392619-ab6a69401",
 		"uuid": "^11.0.2"
 	},

@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/create",
 	"description": "Sodacore CLI project creation tool.",
-	"version": "0.3.22",
+	"version": "0.3.27",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",
@@ -54,7 +54,7 @@
 		"build:watch": "tsc --watch"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"@types/bun": "^1.2.10"
 	},
 	"peerDependencies": {
 		"typescript": "^5.6.3"

@@ -114,7 +114,9 @@ await tasks([
 			const packageMeta = await packageJson.json();
 			packageMeta.version = '0.0.0';
 			packageMeta.scripts = {};
-			packageMeta.scripts.dev = 'bun run ./src/main.ts';
+			packageMeta.scripts.dev = 'SODACORE_ENV=dev bun run ./src/main.ts';
+			packageMeta.scripts.start = 'SODACORE_ENV=prod bun run ./dist/main.js';
+			packageMeta.scripts.build = 'rm -rf ./dist && bun tsc --project ./tsconfig.json';
 			await packageJson.write(JSON.stringify(packageMeta, null, '\t'));
 		},
 	},

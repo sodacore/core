@@ -5,7 +5,7 @@
 </a>
 <h3 align="center">Sodacore</h3>
 <p align="center">
-Sodacore is a bun-powered framework for building server-side applications utilising the lighting fast <a href="https://bun.sh" target="_blank">Bun</a> runtime.<br />The <code>@sodacore/blockchain</code> package provides a plugin that can be extended for creating your own blockchains, this does NOT work with Crypto algorithms, but rather a custom blockchain implementation.<br/>
+Sodacore is a bun-powered framework for building server-side applications utilising the lighting fast <a href="https://bun.sh" target="_blank">Bun</a> runtime.<br />The <code>@sodacore/ui</code> package provides a custom JSON-based DSL for describing webpages and then having them rendered by a frontend framework, we shall offer a Vue-based one.
 <br/>
 <br/>
 <a href="https://sodacore.dev"><strong>Explore the docs »</strong></a>

@@ -112,7 +112,7 @@ export default class Autowire extends BaseModule {
 	private async scanFiles() {
 
 		// Define the files, and create a new glob instance.
-		const files: string[] = [];
+		let files: string[] = [];
 		const glob = new Glob('**/*.{ts,js}');
 
 		// Scan and add the files.
@@ -123,6 +123,14 @@ export default class Autowire extends BaseModule {
 		})) {
 			files.push(file);
 		}
+
+		// Filter out the executing file, this prevents recursion when compiled.
+		const executingFile = String(process.argv[1]);
+		const filePathWithoutExtension = executingFile.split('.').slice(0, -1).join('.');
+		const blacklistedFiles = [`${filePathWithoutExtension}.ts`, `${filePathWithoutExtension}.js`];
+		blacklistedFiles.forEach(path => {
+			files = files.filter(file => file !== path);
+		});
 
 		// Return scanned files.
 		return files;

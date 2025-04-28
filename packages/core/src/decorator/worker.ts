@@ -49,7 +49,7 @@ export default function Worker(filename: string) {
 		target.queue = queue;
 
 		// Add an error listener.
-		instance.addListener('error', event => {
+		instance.addEventListener('error', event => {
 
 			// Get the logger.
 			const logger = Registry.get<Logger>('Logger');
@@ -69,7 +69,7 @@ export default function Worker(filename: string) {
 		});
 
 		// Add a message listener.
-		instance.addListener('message', event => {
+		instance.addEventListener('message', event => {
 
 			// Get the message and the ID.
 			const { id, data, error } = event.data;
@@ -89,7 +89,7 @@ export default function Worker(filename: string) {
 		});
 
 		// Add an on open listener and then call init.
-		instance.addListener('open', () => {
+		instance.addEventListener('open', () => {
 			instance.postMessage({
 				id: v4(),
 				command: 'init',

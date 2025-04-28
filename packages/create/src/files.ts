@@ -6,6 +6,8 @@ export function getFiles(packages: string[]) {
 			content: `
 import { Application } from '@sodacore/core';
 import { env } from 'bun';
+import { resolve } from 'node:path';
+import process from 'node:process';
 ${packages.includes('@sodacore/http@alpha') ? `import HttpPlugin from '@sodacore/http';` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/discord@alpha') ? `import DiscordPlugin from '@sodacore/discord';` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/prisma@alpha') ? `import PrismaPlugin from '@sodacore/prisma';` : '/*REMOVE*/'}
@@ -13,6 +15,9 @@ ${packages.includes('@sodacore/cli@alpha') ? `import CliPlugin from '@sodacore/c
 \n// Initialise application.
 const app = new Application({
 	autowire: true,
+	basePath: env.SODACORE_ENV === 'prod'
+			? resolve(process.cwd(), './dist')
+			: undefined,
 });
 ${packages.includes('@sodacore/http@alpha') ? `\n// Install the HTTP plugin.\napp.use(new HttpPlugin({\n\tport: 3110,\n}));` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/discord@alpha') ? `\n// Install the Discord plugin.\napp.use(new DiscordPlugin({\n\ttoken: env.DISCORD_TOKEN,\n\tclientId: env.DISCORD_CLIENT_ID,\n\tguildId: env.DISCORD_GUILD_ID,\n}));` : '/*REMOVE*/'}
@@ -36,12 +41,12 @@ app.start().catch(console.error);
 		"moduleDetection": "force",
 		"jsx": "react-jsx",
 		"allowJs": true,
+		"outDir": "./dist",
 
 		// Bundler mode
 		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
-		"noEmit": true,
+		"noEmit": false,
 
 		// Best practices
 		"strict": true,
@@ -50,7 +55,7 @@ app.start().catch(console.error);
 
 		// Some stricter flags (disabled by default)
 		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		"noUnusedParameters": false,
 		"noPropertyAccessFromIndexSignature": false,
 
 		// Build.
@@ -62,8 +67,13 @@ app.start().catch(console.error);
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"useDefineForClassFields": false,
-	}
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+	],
 }
+
 			`,
 		},
 		{

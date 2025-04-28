@@ -118,6 +118,7 @@ export default config({
 		}],
 		'unicorn/consistent-function-scoping': 0,
 		'regexp/optimal-quantifier-concatenation': 0,
+		'import/consistent-type-specifier-style': 0,
 	},
 },
 

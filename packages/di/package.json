@@ -38,7 +38,8 @@
 		"email": "sodacoredev@gmail.com"
 	},
 	"scripts": {
-		"build": "rm -rf dist; tsc"
+		"build": "rm -rf dist; tsc",
+		"build:watch": "rm -rf dist; tsc --watch"
 	},
 	"engines": {
 		"bun": ">=1.0.30"

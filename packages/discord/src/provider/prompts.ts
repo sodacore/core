@@ -95,8 +95,4 @@ export default class PromptsHelper {
 		if (!result?.isSelectMenu()) return null;
 		return result.values[0] ?? null;
 	}
-
-	// public async modal(interaction: ChatInputCommandInteraction, question: string, options?: IPromp) {
-	// 	// TODO.
-	// }
 }

@@ -11,7 +11,6 @@ export function MessageContext(name: string): MethodDecorator {
 		// Get the defined methods or fallback to an empty array.
 		const methods = Utils.getMeta<IRouterControllerMethodItem[]>('methods', 'discord')(target, undefined, []);
 		let methodIndex = methods.findIndex((m: any) => m.key === String(propertyKey));
-		console.log('methods', methods, methodIndex);
 
 		// If no method index, create a new item.
 		if (methodIndex === -1) {

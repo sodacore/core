@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/todo/styles.css" />
+		<script type="module" src="/todo/main.js" defer></script>
+		<title>Tasks Demo</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<h1>Tasks Demo</h1>
+
+			<section class="create">
+				<h2>Create Task</h2>
+				<input type="text" placeholder="Task title..." v-model="taskTitle" />
+				<textarea placeholder="Task description..." v-model="taskDescription"></textarea>
+				<button class="info" @click="createTask">Create Task</button>
+			</section>
+
+			<section class="tasks">
+				<h2>Tasks</h2>
+				<ul>
+					<li v-for="task in tasks" :key="task.id">
+						<h3 class="name">{{ task.title }}</h3>
+						<p class="desc">{{ task.description }}</p>
+						<div class="actions">
+							<button class="danger" @click="deleteTask(task)">
+								Delete Task
+							</button>
+							<button :class="[task.completed ? 'warn' : 'success']" @click="toggleTask(task)">
+								{{ task.completed ? 'Mark as Incomplete' : 'Mark as Complete' }}
+							</button>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</body>
+</html>

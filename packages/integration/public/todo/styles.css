@@ -1,0 +1,96 @@
+body {
+	background-color: #1d1d1d;
+	margin: 0;
+	padding: 20px;
+}
+
+body * {
+	color: white;
+	box-sizing: border-box;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+	text-align: center;
+	margin: 0 0 20px 0;
+}
+
+input, textarea {
+	display: block;
+	width: 100%;
+	max-width: 400px;
+	padding: 10px 10px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	font-size: 16px;
+	border: none;
+	background-color: #313131;
+}
+
+button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+h3, p {
+	margin: 0;
+}
+
+.tasks ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-top: 50px;
+}
+
+.tasks li {
+	display: grid;
+	grid-template-areas: "name actions" "desc actions";
+	grid-template-columns: 3fr 1fr;
+	grid-template-rows: auto auto;
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.tasks li:last-child {
+	border-bottom: none;
+}
+
+.tasks li .name {
+	grid-area: name;
+}
+
+.tasks li .desc {
+	grid-area: desc;
+}
+
+.tasks li .actions {
+	grid-area: actions;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.actions button {
+	margin: 5px 0;
+}
+
+.info {
+	background-color: #007bff;
+}
+
+.success {
+	background-color: #28a745;
+}
+
+.danger {
+	background-color: #dc3545;
+}
+
+.warn {
+	background-color: #ffc107;
+}

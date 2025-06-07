@@ -1,6 +1,6 @@
 {
 	"name": "@sodacore/monorepo",
-	"version": "0.3.29",
+	"version": "0.3.30",
 	"module": "false",
 	"dependencies": {
 		"bun": "^1.2.9",

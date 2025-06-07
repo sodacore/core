@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/prisma",
 	"description": "Sodacore Prisma is a plugin that initialises the Prisma ORM within your project.",
-	"version": "0.3.29",
+	"version": "0.3.30",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

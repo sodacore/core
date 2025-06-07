@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/ws",
 	"description": "Sodacore ws is a core plugin that extends the Http plugin offering WebSocket support to the Sodacore framework.",
-	"version": "0.3.30",
+	"version": "0.3.31",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

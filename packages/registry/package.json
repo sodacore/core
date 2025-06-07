@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/registry",
 	"description": "Sodacore registry is a core framework module for providing an available registry.",
-	"version": "0.3.30",
+	"version": "0.3.31",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

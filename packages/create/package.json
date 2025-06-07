@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/create",
 	"description": "Sodacore CLI project creation tool.",
-	"version": "0.3.30",
+	"version": "0.3.31",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/core",
 	"description": "Sodacore is a Bun-powered TypeScript framework for creating server-side driven applications, for HTTP, WebSockets, Discord and more.",
-	"version": "0.3.30",
+	"version": "0.3.31",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

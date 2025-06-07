@@ -144,6 +144,7 @@ export function Autocomplete(name: string, subCommand?: string): MethodDecorator
 		// Set the method properties.
 		methods[methodIndex].type = 'autocomplete';
 		methods[methodIndex].unique = name;
+		methods[methodIndex].subType = subCommand;
 
 		// Set the data back.
 		Utils.setMeta('methods', 'discord')(target, methods);

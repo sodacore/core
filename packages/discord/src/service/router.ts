@@ -338,7 +338,7 @@ export default class Router {
 
 	private getControllerMethodByMultiple(controller: IRouterControllerItem, type: string, unique: string, subType?: string) {
 		return controller.methods.find((item: IRouterControllerMethodItem) => {
-			return item.unique === unique && item.type === type && (subType ?? item.subType === subType);
+			return item.unique === unique && item.type === type && (subType && item.subType === subType);
 		});
 	}
 

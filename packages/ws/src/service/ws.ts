@@ -163,7 +163,7 @@ export default class WsService extends BaseService {
 		}
 
 		// Let's parse the message.
-		const { command, data } = JSON.parse(content);
+		const { command, context } = JSON.parse(content);
 
 		// Let's check for a valid command.
 		if (!command || !this.controllers.has(command)) {
@@ -176,7 +176,7 @@ export default class WsService extends BaseService {
 		if (!method) throw new Error(`Method not found for command: "${command}" - this looks like a bug.`);
 
 		// Add the data to the connection.
-		connection.setData(data);
+		connection.setData(context);
 
 		// Execute the method.
 		const result = await method(connection);

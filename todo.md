@@ -14,7 +14,7 @@ We should then create some basic middleware features that can be supported out o
 ### Tweaks
 
 - Add support for CORS functionality within the system.
-- Tweak Prisma so we can get it supported properly.
+- Tweak the i18n package so that the auto resolving of user locale works better, and can pick up just the language instead of the full locale.
 
 ### Docs: Update.
 

@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/i18n",
 	"description": "Sodacore i18n is a plugin that offers internationalisation and localisation support for the Sodacore framework.",
-	"version": "0.3.31",
+	"version": "0.3.32",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

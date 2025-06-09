@@ -51,7 +51,7 @@ export default class I18nService extends BaseService {
 	public getAvailableLanguages(lower?: boolean) {
 		if (!this._hasTranslations) return [];
 		const defaultLang = this.config?.defaultLang || 'en-GB';
-		const availableLanguages = lower ? Object.keys(this.translations).map(lang => lang.toLowerCase()) : Object.keys(this.translations);
+		const availableLanguages = lower ? Object.keys(this.translations) : Object.keys(this.translations);
 		return [defaultLang, ...availableLanguages];
 	}
 
@@ -84,8 +84,8 @@ export default class I18nService extends BaseService {
 				const content = await Bun.file(filePath).json();
 				const fileName = filePath.split('/').pop()?.replace('.json', '');
 				if (!fileName) throw new Error(`Invalid file name: ${filePath}`);
-				const [lang, country] = fileName.toLowerCase().split('-') || [];
-				translations[fileName.toLowerCase()] = {
+				const [lang, country] = fileName.split('-') || [];
+				translations[fileName] = {
 					_lang: lang ?? 'en',
 					_code: fileName,
 					_country: country ?? 'gb',

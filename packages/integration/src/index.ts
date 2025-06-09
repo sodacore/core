@@ -32,7 +32,9 @@ app.use(new HttpPlugin({
 app.use(new WsPlugin());
 
 // Install the i18n plugin.
-app.use(new I18nPlugin());
+app.use(new I18nPlugin({
+	defaultLang: 'en',
+}));
 
 // Install the UI plugin.
 // app.use(new UiPlugin({}));

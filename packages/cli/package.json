@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/cli",
 	"description": "Sodacore CLI is a plugin that offers CLI functionality within the framework.",
-	"version": "0.3.31",
+	"version": "0.3.32",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",

@@ -36,11 +36,6 @@ export default function Worker(filename: string, options?: IWorkerOptions) {
 			throw new Error(`The pool size for the worker "${target.name}" must be at least 1.`);
 		}
 
-		// // If the auto scale option is enabled, then throw an error if pool size is defined.
-		// if (options && options.autoScale && typeof options.poolSize !== 'undefined') {
-		// 	throw new Error(`The auto scale option for the worker "${target.name}" cannot be used with a defined pool size. Instead you can use the maxPoolSize option to define the maximum size of the pool.`);
-		// }
-
 		// Define our UID.
 		const uid = options?.uid ?? v4();
 

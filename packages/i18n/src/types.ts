@@ -1,5 +1,5 @@
 export type IConfig = {
-	defaultLang?: string,
+	defaultLocale?: string,
 	translationsPath?: string,
 };
 

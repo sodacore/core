@@ -10,19 +10,22 @@ import { resolve } from 'node:path';
 import process from 'node:process';
 ${packages.includes('@sodacore/http@alpha') ? `import HttpPlugin from '@sodacore/http';` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/discord@alpha') ? `import DiscordPlugin from '@sodacore/discord';` : '/*REMOVE*/'}
-${packages.includes('@sodacore/prisma@alpha') ? `import PrismaPlugin from '@sodacore/prisma';` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/cli@alpha') ? `import CliPlugin from '@sodacore/cli';` : '/*REMOVE*/'}
+${packages.includes('@sodacore/i18n@alpha') ? `import I18nPlugin from '@sodacore/i18n';` : '/*REMOVE*/'}
+${packages.includes('@sodacore/ws@alpha') ? `import WsPlugin from '@sodacore/ws';` : '/*REMOVE*/'}
 \n// Initialise application.
 const app = new Application({
 	autowire: true,
 	basePath: env.SODACORE_ENV === 'prod'
-			? resolve(process.cwd(), './dist')
-			: undefined,
+		? resolve(process.cwd(), './dist')
+		: undefined,
 });
-${packages.includes('@sodacore/http@alpha') ? `\n// Install the HTTP plugin.\napp.use(new HttpPlugin({\n\tport: 3110,\n}));` : '/*REMOVE*/'}
+${packages.includes('@sodacore/http@alpha') ? `\n// Install the HTTP plugin.\napp.use(new HttpPlugin({\n\tport: Number.parseInt(env.HTTP_PORT),\n}));` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/discord@alpha') ? `\n// Install the Discord plugin.\napp.use(new DiscordPlugin({\n\ttoken: env.DISCORD_TOKEN,\n\tclientId: env.DISCORD_CLIENT_ID,\n\tguildId: env.DISCORD_GUILD_ID,\n}));` : '/*REMOVE*/'}
-${packages.includes('@sodacore/prisma@alpha') ? `\n// Install the Prisma plugin.\napp.use(new PrismaPlugin());` : '/*REMOVE*/'}
 ${packages.includes('@sodacore/cli@alpha') ? `\n// Install the CLI plugin.\napp.use(new CliPlugin({\n\tport: env.CLI_PORT,\n\thost: env.CLI_HOST,\n\tpass: env.CLI_PASS\n}));'` : '/*REMOVE*/'}
+${packages.includes('@sodacore/prisma@alpha') ? `\n// Install the Prisma plugin.\n// You will need to generate the prisma client and set the path.\n// The path will default to @prisma/client, otherwise set it below.\n// app.use(new PrismaPlugin({\n//\tgeneratedClientPath: './prisma/prisma/client',\n// }));` : '/*REMOVE*/'}
+${packages.includes('@sodacore/i18n@alpha') ? `\n// Install the I18n plugin.\napp.use(new I18nPlugin({\n\tdefaultLocale: 'en-GB',\n}));` : '/*REMOVE*/'}
+${packages.includes('@sodacore/ws@alpha') ? `\n// Install the WebSocket plugin.\napp.use(new WsPlugin({\n\tpath: env.WS_PATH,\n}));` : '/*REMOVE*/'}
 \n// Start the application.
 app.start().catch(console.error);
 			`.trim().replaceAll('\n/*REMOVE*/', ''),
@@ -81,13 +84,29 @@ app.start().catch(console.error);
 			path: './src/controller/http.ts',
 			content: `
 import { Controller, Get } from '@sodacore/http';
-
+${packages.includes('@sodacore/i18n@alpha') ? `import { I18nProvider } from '@sodacore/i18n';\nimport { Inject } from '@sodacore/di';\n` : '\n'}
 @Controller('/')
 export class HomeController {
-
+	${packages.includes('@sodacore/i18n@alpha') ? `@Inject() private i18n!: I18nProvider;\n` : '\n'}
 	@Get('/')
 	public async index() {
-		return 'Hello world!';
+		${packages.includes('@sodacore/i18n@alpha') ? `return this.i18n.autoTranslate('_t(Hello, World)!')` : `return 'Hello, World!'`};
+	}
+}
+			`,
+		},
+		{
+			package: '@sodacore/ws@alpha',
+			path: './src/controller/ping.ts',
+			content: `
+import { Controller, Expose } from '@sodacore/ws';
+
+@Controller('ping')
+export class PingController {
+
+	@Expose('ping')
+	public ping() {
+		return 'pong';
 	}
 }
 			`,
@@ -114,24 +133,15 @@ export class PingCommand {
 			`,
 		},
 		{
-			package: '@sodacore/discord@alpha',
-			path: './src/providers/discord.ts',
+			package: '@sodacore/core@alpha',
+			path: './.env',
 			content: `
-import { SlashCommandsProvider } from '@sodacore/discord';
-import { Provide, Inject } from '@sodacore/di';
-
-@Provide()
-export class DiscordProvider {
-	@Inject() private slashCommands!: SlashCommandsProvider;
-
-	public async register() {
-		await this.slashCommands.register();
-	}
-
-	public async unregister() {
-		await this.slashCommands.unregister();
-	}
-}
+CLI_PASSWORD="YOUR_SUPER_SECURE_PASSWORD"
+${packages.includes('@sodacore/ws@alpha') ? 'WS_PATH="/ws"' : '/*REMOVE*/'}
+${packages.includes('@sodacore/http@alpha') ? 'HTTP_PORT=3110' : '/*REMOVE*/'}
+${packages.includes('@sodacore/discord@alpha') ? 'DISCORD_TOKEN="YOUR_DISCORD_TOKEN"' : '/*REMOVE*/'}
+${packages.includes('@sodacore/discord@alpha') ? 'DISCORD_CLIENT_ID="YOUR_DISCORD_CLIENT_ID"' : '/*REMOVE*/'}
+${packages.includes('@sodacore/discord@alpha') ? 'DISCORD_GUILD_ID="YOUR_DISCORD_GUILD_ID"' : '/*REMOVE*/'}
 			`,
 		},
 	];

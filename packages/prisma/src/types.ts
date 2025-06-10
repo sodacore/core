@@ -1,5 +1,5 @@
 export type IConfig = {
-	generatedClientPath?: string, // Only use if the automatic resolver fails.
+	schemaFileLocation?: string, // Only use if the automatic resolver fails.
 	onInit?: (prisma: any) => void | Promise<void>,
 };
 

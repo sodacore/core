@@ -7,7 +7,7 @@ import { REGEX_TRANSLATION_TAG, REGEX_TRANSLATION_TAG_QUERY } from '../helper/co
 export default class I18nProvider {
 	@Inject('@i18n:config') private config?: IConfig;
 	@Inject() private i18nService!: I18nService;
-	private defaultLanguage = this.config?.defaultLang || null;
+	private defaultLanguage = this.config?.defaultLocale || null;
 
 	public t(query: string, languageCode: string, fallback?: string) {
 		return this.translate(query, languageCode, fallback);
@@ -15,7 +15,7 @@ export default class I18nProvider {
 
 	public translate(query: string, languageCode: string, fallback?: string) {
 		if (!this.i18nService.hasTranslations()) return fallback ?? query;
-		return this.i18nService.translate(query, languageCode ?? this.config?.defaultLang, fallback);
+		return this.i18nService.translate(query, languageCode ?? this.config?.defaultLocale, fallback);
 	}
 
 	public autoTranslate(data: string | Array<any> | Record<string, any>, languageCode: string) {

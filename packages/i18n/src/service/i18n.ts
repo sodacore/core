@@ -50,7 +50,7 @@ export default class I18nService extends BaseService {
 
 	public getAvailableLanguages(lower?: boolean) {
 		if (!this._hasTranslations) return [];
-		const defaultLang = this.config?.defaultLang || 'en-GB';
+		const defaultLang = this.config?.defaultLocale || 'en-GB';
 		const availableLanguages = lower ? Object.keys(this.translations) : Object.keys(this.translations);
 		return [defaultLang, ...availableLanguages];
 	}

@@ -67,7 +67,7 @@ export default class PrismaService extends BaseService {
 
 	private async getSchemaFile() {
 		const defaultSchemaFilePath = resolve(this.prismaFolderPath, './schema.prisma');
-		const schemaFilePath = this.config?.generatedClientPath ?? defaultSchemaFilePath;
+		const schemaFilePath = this.config?.schemaFileLocation ?? defaultSchemaFilePath;
 		const schemaHandle = file(schemaFilePath);
 		if (await schemaHandle.exists()) {
 			return schemaHandle;

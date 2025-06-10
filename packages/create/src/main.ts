@@ -49,8 +49,9 @@ const plugins = await multiselect({
 	options: [
 		{ value: '@sodacore/http@alpha', label: 'HTTP' },
 		{ value: '@sodacore/ws@alpha', label: 'WebSockets' },
-		{ value: '@sodacore/prisma@alpha', label: 'Prisma' },
+		{ value: '@sodacore/prisma@alpha', label: 'Prisma' }, // This requires config, only offer to install it.
 		{ value: '@sodacore/discord@alpha', label: 'Discord' },
+		{ value: '@sodacore/i18n@alpha', label: 'I18n' },
 	],
 });
 if (isCancel(plugins)) {

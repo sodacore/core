@@ -24,6 +24,12 @@ createApp({
 			} else {
 				console.error('Failed to create task');
 			}
+
+			// const sock = new WebSocket('ws://localhost:3101/ws');
+			// sock.onopen = () => console.log('WebSocket connection established');
+			// sock.onmessage = (event) => console.log(event.data);
+			// sock.onerror = (error) => console.error('WebSocket error:', error);
+			// sock.onclose = () => console.log('WebSocket connection closed');
 		};
 
 		const refreshTasks = async () => {
@@ -65,7 +71,7 @@ createApp({
 			refreshTasks,
 		};
 	},
-	created: function() {
+	created() {
 		this.refreshTasks();
 	},
 }).mount('#app');

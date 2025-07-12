@@ -160,8 +160,8 @@ export default class Autowire extends BaseModule {
 				if (typeof module[key] !== 'function') continue;
 
 				// Check if the key from the class is a module.
-				const type = Utils.getMeta('type', 'autowire')(module[key]);
-				if (!type) continue;
+				const types = Utils.getMeta<string[]>('type', 'autowire')(module[key], undefined, []);
+				if (types.length === 0) continue;
 
 				// Add to our modules.
 				this.modules.push(module[key]);
@@ -195,12 +195,12 @@ export default class Autowire extends BaseModule {
 
 			// Get metadata.
 			const name = Utils.getMeta('name', 'di')(Module);
-			const type = Utils.getMeta('type', 'autowire')(Module, undefined, 'core');
-			this.logger.info(`[AUTOWIRE]: Registering ${type}: "${name ?? Module.name}".`);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(Module, undefined, ['core']);
+			this.logger.info(`[AUTOWIRE]: Registering ${types.join(', ')}: "${name ?? Module.name}".`);
 
-			// If worker or thread type, do not initialise, only register.
-			if (['thread'].includes(type)) {
-				Registry.set(`@sodacore:${type}:${name ?? Module.name}`, Module);
+			// If thread type, do not initialise, only register.
+			if (types.includes('thread')) {
+				Registry.set(`@sodacore:thread:${name ?? Module.name}`, Module);
 				continue;
 			}
 

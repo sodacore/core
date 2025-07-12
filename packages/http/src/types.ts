@@ -30,6 +30,7 @@ export type IServerContext = {
 export type IRoute = {
 	methodName: string,
 	controller: any,
+	middlewares: IMiddleware[],
 	transformers: ((context: HttpContext, response: any) => Promise<any>)[],
 };
 
@@ -43,13 +44,17 @@ export type IControllerMethodArgItem = {
 	format?: string,
 };
 
-export interface IMiddleware {
-	handle: (context: HttpContext) => Promise<Response | boolean | void>,
-}
-
 export interface ITranslationService {
 	hasTranslations: () => boolean,
 	translate: (query: string, options: { lang: string, country?: string }) => string,
 }
 
 export type ITransformFunction = (context: HttpContext, response: any) => MaybePromise<any>;
+
+export interface IGlobalMiddleware<ConfigType = Record<string, any>, ContextType = HttpContext> {
+	config?: ConfigType,
+	supports?: (context: ContextType) => Promise<Response | boolean | void>,
+	handle: (context: ContextType) => Promise<Response | boolean | void>,
+};
+
+export type IMiddleware = (context: HttpContext) => MaybePromise<Response | boolean | void>;

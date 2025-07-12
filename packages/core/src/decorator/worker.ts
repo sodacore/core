@@ -39,8 +39,12 @@ export default function Worker(filename: string, options?: IWorkerOptions) {
 		// Define our UID.
 		const uid = options?.uid ?? v4();
 
+		// Define the autowire type.
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		if (!types.includes('worker')) types.push('worker');
+		Utils.setMeta('type', 'autowire')(target, types);
+
 		// Define any base metadata.
-		Utils.setMeta('type', 'autowire')(target, 'worker');
 		Utils.setMeta('filename', 'worker')(target, filename);
 		Utils.setMeta('uid', 'worker')(target, uid);
 		Utils.setMeta('options', 'worker')(target, options ?? {});

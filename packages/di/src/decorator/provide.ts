@@ -1,4 +1,4 @@
-import { setMeta } from '../helper/decorator';
+import { getMeta, setMeta } from '../helper/decorator';
 
 /**
  * Provide the given class as a dependency, to be used with the
@@ -11,7 +11,9 @@ import { setMeta } from '../helper/decorator';
  */
 export default function Provide(name?: string) {
 	return (target: any) => {
+		const types = getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('provider');
+		setMeta('type', 'autowire')(target, types);
 		setMeta('name', 'di')(target, name ?? target.name);
-		setMeta('type', 'autowire')(target, 'provider');
 	};
 }

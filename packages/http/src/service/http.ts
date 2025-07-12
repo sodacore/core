@@ -1,4 +1,4 @@
-import type { IConfig, IControllerMetaMethodItem, IControllerMethodArgItem, IMiddleware, IRoutes, IServerContext, IWebSocketEventListener, IWebSocketEvents } from '../types';
+import type { IConfig, IControllerMetaMethodItem, IControllerMethodArgItem, IGlobalMiddleware, IMiddleware, IRoutes, IServerContext, IWebSocketEventListener, IWebSocketEvents } from '../types';
 import { BaseService, Utils as CoreUtils, Events, Service } from '@sodacore/core';
 import { Inject, Utils } from '@sodacore/di';
 import { Registry } from '@sodacore/registry';
@@ -26,6 +26,7 @@ export default class HttpService extends BaseService {
 	private serverConfig!: Serve<IServerContext>;
 	private controllers: any[] = [];
 	private middleware: IMiddleware[] = [];
+	private globalMiddleware: IGlobalMiddleware[] = [];
 	private routes: IRoutes = {};
 
 	/**
@@ -44,22 +45,21 @@ export default class HttpService extends BaseService {
 		for (const module of modules) {
 
 			// Define the variables
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
 
 			// Check for valid type and service it is for.
-			if (!type || !services.includes('http')) continue;
+			if (types.length === 0 || !services.includes('http')) continue;
 
 			// If a middleware type.
-			if (type === 'middleware') {
-				this.middleware.push(module);
-				continue;
+			if (types.includes('middleware')) {
+				const isGlobal = Utils.getMeta<boolean>('global', 'middleware')(module.constructor, undefined, false);
+				this[isGlobal ? 'globalMiddleware' : 'middleware'].push(module);
 			}
 
 			// If a controller type.
-			if (type === 'controller') {
+			if (types.includes('controller')) {
 				this.controllers.push(module);
-				continue;
 			}
 		}
 
@@ -69,6 +69,8 @@ export default class HttpService extends BaseService {
 			// Get the base path and methods.
 			const basePath = Utils.getMeta<string>('path', 'http')(controller.constructor, undefined, '[/]');
 			const methods = Utils.getMeta<IControllerMetaMethodItem[]>('methods', 'http')(controller, undefined, []);
+			const controllerMiddlewares = Utils.getMeta<IMiddleware[]>('middlewares', 'http')(controller.constructor, undefined, []);
+			const controllerTransformers = Utils.getMeta<((context: HttpContext, response: any) => Promise<any>)[]>('transformers', 'http')(controller.constructor, undefined, []);
 
 			// Loop the methods.
 			methods.forEach(method => {
@@ -77,14 +79,15 @@ export default class HttpService extends BaseService {
 				const methodPath = Utils.getMeta<string>('path', 'http')(controller, method.key, method.path);
 				const path = CoreUtils.resolve(basePath, methodPath);
 				const httpMethod = method.method.toUpperCase();
+				const methodMiddlewares = Utils.getMeta<IMiddleware[]>('middlewares', 'http')(controller, method.key, []);
 				const methodTransformers = Utils.getMeta<((context: HttpContext, response: any) => Promise<any>)[]>('transformers', 'http')(controller, method.key, []);
-				const controllerTransformers = Utils.getMeta<((context: HttpContext, response: any) => Promise<any>)[]>('transformers', 'http')(controller.constructor, undefined, []);
 
 				// Check if a route for that method exists.
 				if (!this.routes[httpMethod]) this.routes[httpMethod] = {};
 				this.routes[httpMethod][path] = {
 					methodName: method.key,
 					controller,
+					middlewares: [...controllerMiddlewares, ...methodMiddlewares],
 					transformers: [...methodTransformers, ...controllerTransformers],
 				};
 			});
@@ -153,9 +156,10 @@ export default class HttpService extends BaseService {
 				// Define basic information.
 				const requestUrl = request.url;
 				const requestMethod = request.method.toUpperCase();
+				const remoteAddress = server.requestIP(request);
 
 				// Notify console.
-				this.logger.info(`[HTTP]: Received a ${requestMethod} request for: ${requestUrl}.`);
+				this.logger.info(`[HTTP]: ${requestMethod} ${requestUrl} {${remoteAddress?.address}} {${remoteAddress?.port}} {${remoteAddress?.family}}`);
 
 				// Handle the request.
 				const response = await this.handleRequest.bind(this)(request, server);
@@ -215,10 +219,18 @@ export default class HttpService extends BaseService {
 		this.events.dispatch('httpRequest', { request, server, context });
 
 		// Let's run any middleware.
-		for (const middleware of this.middleware) {
+		for (const middleware of this.globalMiddleware) {
 
 			// Execute the middleware.
 			try {
+
+				// Check if the middleware has a supports method, and then run it.
+				if (middleware.supports) {
+					const doesSupport = await middleware.supports(context);
+					if (!doesSupport) continue;
+				}
+
+				// Execute the middleware handle method.
 				const result = await middleware.handle.bind(middleware)(context);
 
 				// If the result is a response, return it.
@@ -227,13 +239,13 @@ export default class HttpService extends BaseService {
 				};
 
 				// Check if the result is false, if so return a 401.
-				if (result === false) return new Response(undefined, { status: 401 });
+				if (result === false) return new Response(undefined, { status: 401, headers: context.getResponseHeaders() });
 
 			} catch (err) {
 
 				// Throw an error about middleware failing.
 				this.logger.error(`[HTTP]: Failed middleware: ${middleware.constructor.name}, reason: ${(err as Error).message}.`);
-				return new Response(undefined, { status: 500 });
+				return new Response(undefined, { status: 500, headers: context.getResponseHeaders() });
 			}
 		}
 
@@ -261,7 +273,7 @@ export default class HttpService extends BaseService {
 
 			// Check if the user is requesting SSE.
 			const accept = context.getRequest().headers.get('Accept');
-			if (!accept || !accept.includes('text/event-stream')) return new Response(undefined, { status: 404 });
+			if (!accept || !accept.includes('text/event-stream')) return new Response(undefined, { status: 404, headers: context.getResponseHeaders() });
 
 			// Otherwise, handle the SSE request.
 			this.logger.info(`[HTTP]: Upgrading connection to SSE, for path: "${path}".`);
@@ -269,7 +281,7 @@ export default class HttpService extends BaseService {
 		}
 
 		// Get the routes for that method.
-		const routes = this.routes[method];
+		const routes = this.routes[method] ?? {};
 
 		// Loop routes and match.
 		const matchedPath = Object.keys(routes).find(routePath => {
@@ -277,12 +289,22 @@ export default class HttpService extends BaseService {
 		});
 
 		// If no matched path, return 404.
-		if (!matchedPath) return new Response(undefined, { status: 404 });
+		if (!matchedPath) return new Response(undefined, { status: 404, headers: context.getResponseHeaders() });
 
 		// Validate the method is a function.
 		const handler = routes[matchedPath];
-		if (!handler) return new Response(undefined, { status: 404 });
-		if (typeof handler.controller[handler.methodName] !== 'function') return new Response(undefined, { status: 500 });
+		if (!handler) return new Response(undefined, { status: 404, headers: context.getResponseHeaders() });
+		if (typeof handler.controller[handler.methodName] !== 'function') return new Response(undefined, { status: 500, headers: context.getResponseHeaders() });
+
+		// Execute any controller/method middlewares.
+		for (const middleware of handler.middlewares) {
+			try {
+				await middleware(context);
+			} catch (err) {
+				this.logger.error(`[HTTP]: Failed middleware: ${middleware.constructor.name}, reason: ${(err as Error).message}.`);
+				return new Response(undefined, { status: 500, headers: context.getResponseHeaders() });
+			}
+		}
 
 		// Get the param names from the route url and match them to the given path and then convert to an object.
 		const params = getRouteParams(matchedPath, path);
@@ -302,7 +324,8 @@ export default class HttpService extends BaseService {
 			}
 
 			// Run the method and collect the result.
-			let result = await handler.controller[handler.methodName].bind(handler.controller)(...functionArguments, context);
+			const isWorker = Utils.getMeta<string[]>('type', 'autowire')(handler.controller.constructor, undefined, []).includes('worker');
+			let result = await handler.controller[handler.methodName].bind(handler.controller)(...functionArguments, isWorker ? undefined : isWorker);
 
 			// Check for transformers and apply them.
 			try {
@@ -316,14 +339,14 @@ export default class HttpService extends BaseService {
 			}
 
 			// Now convert the response to a Response object.
-			return toResponse(result);
+			return toResponse(result, context);
 
 		} catch (err) {
 
 			// Log the error, and return a 500.
 			this.logger.error(`[HTTP]: Failed ${method}: ${matchedPath}, with controller: ${handler.controller.constructor.name} and method: ${handler.methodName}, reason: ${(err as Error).message}.`);
 			console.error(err);
-			return new Response(undefined, { status: 500 });
+			return new Response(undefined, { status: 500, headers: context.getResponseHeaders() });
 		}
 	}
 
@@ -339,8 +362,14 @@ export default class HttpService extends BaseService {
 			context: sseContext,
 		});
 
+		// Get the custom headers.
+		const userHeaders: Record<string, string> = {};
+		context.getResponseHeaders().forEach((value, key) => {
+			userHeaders[key] = value;
+		});
+
 		// Let's create the SSE link.
-		return sseContext.getSseResponse();
+		return sseContext.getSseResponse(userHeaders);
 	}
 
 	/**

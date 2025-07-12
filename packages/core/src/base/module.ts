@@ -22,9 +22,9 @@ export default class BaseModule {
 	public constructor(
 		protected config: IConfig,
 	) {
-		const type = Utils.getMeta('type', 'autowire')(this.constructor, undefined, 'core');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(this.constructor, undefined, ['core']);
 		const name = Utils.getMeta('name', 'autowire')(this.constructor, undefined, this.constructor.name);
-		Registry.set(`@module:${type}:${name}`, this);
+		Registry.set(`@module:${types.join(',')}:${name}`, this);
 	}
 
 	/**

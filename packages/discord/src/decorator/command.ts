@@ -3,7 +3,9 @@ import { SharedSlashCommand } from 'discord.js';
 
 export function Command(builder: SharedSlashCommand): ClassDecorator {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'controller');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('controller');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('type', 'discord')(target, 'command');
 		Utils.setMeta('builder', 'discord')(target, builder);
 		const services = Utils.getMeta<string[]>('services', 'controller')(target, undefined, []);
@@ -14,7 +16,9 @@ export function Command(builder: SharedSlashCommand): ClassDecorator {
 
 export function ContextMenu(): ClassDecorator {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'controller');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('controller');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('type', 'discord')(target, 'contextmenu');
 		const services = Utils.getMeta<string[]>('services', 'controller')(target, undefined, []);
 		services.push('discord');
@@ -24,7 +28,9 @@ export function ContextMenu(): ClassDecorator {
 
 export function Event(): ClassDecorator {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'controller');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('controller');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('type', 'discord')(target, 'event');
 		const services = Utils.getMeta<string[]>('services', 'controller')(target, undefined, []);
 		services.push('discord');
@@ -34,7 +40,9 @@ export function Event(): ClassDecorator {
 
 export function Handler(): ClassDecorator {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'controller');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('controller');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('type', 'discord')(target, 'event');
 		const services = Utils.getMeta<string[]>('services', 'controller')(target, undefined, []);
 		services.push('discord');

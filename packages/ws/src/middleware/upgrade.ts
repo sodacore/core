@@ -1,25 +1,31 @@
 import type { IConfig } from '../types';
 import { Logger } from '@sodacore/core';
 import { Inject } from '@sodacore/di';
-import { type HttpContext, type IMiddleware, Middleware } from '@sodacore/http';
+import { GlobalMiddleware, type HttpContext, type IGlobalMiddleware } from '@sodacore/http';
 import { v4 } from 'uuid';
 
-@Middleware()
-export default class UpgradeMiddleware implements IMiddleware {
-	@Inject('@ws:config') private config!: IConfig;
+@GlobalMiddleware()
+export default class UpgradeMiddleware implements IGlobalMiddleware {
+	@Inject('@ws:config') private wsConfig!: IConfig;
 	@Inject() private logger!: Logger;
 
-	public async handle(context: HttpContext) {
+	public async supports(context: HttpContext) {
 
-		// Only execute if connection is attempting to upgrade.
+		// Check if the request is an upgrade request.
 		const hConnection = context.getHeader('connection');
 		const hUpgrade = context.getHeader('upgrade');
-		if (hConnection !== 'Upgrade' || hUpgrade !== 'websocket') return;
+		if (hConnection !== 'Upgrade' || hUpgrade !== 'websocket') return false;
 
 		// Check if the request matches one of the paths.
 		const requestPath = context.getUrl().pathname;
-		const paths = this.config.path ? Array.isArray(this.config.path) ? this.config.path : [this.config.path] : ['/ws'];
-		if (!paths.includes(requestPath)) return new Response('Not Implemented', { status: 501 });
+		const paths = this.wsConfig.path ? Array.isArray(this.wsConfig.path) ? this.wsConfig.path : [this.wsConfig.path] : ['/ws'];
+		if (!paths.includes(requestPath)) return false;
+
+		// Return true if the request is a valid upgrade request.
+		return true;
+	}
+
+	public async handle(context: HttpContext) {
 
 		// Let's get the request and server.
 		const request = context.getRequest();
@@ -28,7 +34,7 @@ export default class UpgradeMiddleware implements IMiddleware {
 		const maxAge = 60 * 60 * 24; // 24 hours.
 
 		// Log the upgrade.
-		this.logger.info(`[MIDDLEWARE]: Upgrading http connection to WebSocket for path: "${requestPath}"`);
+		this.logger.info(`[MIDDLEWARE]: Upgrading http connection to WebSocket for path: "${context.getUrl().pathname}"`);
 
 		// Attempt to upgrade.
 		const status = server.upgrade(request, {

@@ -17,11 +17,11 @@ export default class Scripts extends BaseModule {
 		for (const module of modules) {
 
 			// Define the variables
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
 
 			// Check for valid type and service it is for.
-			if (!type || !services.includes('script')) continue;
+			if (types.length === 0 || !services.includes('script')) continue;
 
 			// Get the methods.
 			const namespace = Utils.getMeta<string>('namespace', 'script')(module.constructor, undefined, '');

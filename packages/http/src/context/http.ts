@@ -13,6 +13,7 @@ export default class HttpContext {
 	protected session = new Map<string, any>();
 	protected url: URL;
 	protected cookies: Map<string, string>;
+	protected responseHeaders = new Headers();
 
 	/**
 	 * Initialise the request, defined by the http service
@@ -184,6 +185,25 @@ export default class HttpContext {
 	 */
 	public getMethod() {
 		return this.request.method;
+	}
+
+	/**
+	 * Will set a response header, this will be used
+	 * to set headers on the response object.
+	 * @param name Name of the header.
+	 * @param value Value of the header.
+	 */
+	public setResponseHeader(name: string, value: string) {
+		this.responseHeaders.set(name, value);
+	}
+
+	/**
+	 * Will set multiple response headers, this will be used
+	 * to set headers on the response object.
+	 * @returns Headers
+	 */
+	public getResponseHeaders() {
+		return this.responseHeaders;
 	}
 
 	/**

@@ -37,15 +37,15 @@ export default class Threads extends BaseModule {
 		for (const module of modules) {
 
 			// Define the variables
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
 			const namespace = Utils.getMeta<string>('namespace', 'thread')(module.constructor, undefined, '');
 
 			// Check for valid type and service it is for.
-			if (!type) continue;
+			if (types.length === 0) continue;
 
 			// If a controller type.
-			if (type === 'controller' && services.includes('thread')) {
+			if (types.includes('controller') && services.includes('thread')) {
 				this.controllers[namespace] = (module);
 			}
 		}

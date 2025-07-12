@@ -1,4 +1,4 @@
-import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, ClientEventTypes, ClientOptions, ContextMenuCommandInteraction, GuildMember, ModalSubmitInteraction, SelectMenuInteraction, User } from 'discord.js';
+import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, ClientEventTypes, ClientOptions, ContextMenuCommandInteraction, GuildMember, InteractionContextType, ModalSubmitInteraction, Permissions, RestOrArray, SelectMenuInteraction, User } from 'discord.js';
 
 export type IAuthFunctionUser = (user: User) => boolean | Promise<boolean>;
 export type IAuthFunctionGuildMember = (user: GuildMember) => boolean | Promise<boolean>;
@@ -27,12 +27,15 @@ export type IRouterControllerMethodItem = {
 	type: string,
 	subType?: string,
 	auth: IAuthFunctionItem[],
+	subCommand?: IDiscordOptionsSubCommand,
+	options?: IDiscordOptionsGroup[],
 };
 
 export type IRouterControllerItem = {
 	name: string | null,
 	className: string,
 	methods: IRouterControllerMethodItem[],
+	options?: IDiscordOptions[],
 	module: any,
 };
 
@@ -75,4 +78,52 @@ export type IPromptsChoiceOptions = IPromptsQuestionOptions & {
 	placeholder?: string,
 };
 
-// export type IPrompts
+export type IDiscordOptionChoice = {
+	name: string,
+	value: string | number,
+	nameLocalizations?: Record<string, string>,
+};
+
+export type IDiscordOptionType = 'string' | 'number' | 'integer' | 'boolean' | 'user' | 'channel' | 'role' | 'mentionable' | 'attachment';
+
+// Covers: Attachment, Boolean, Channel, Mentionable, Role, User.
+export type IDiscordOptionsGeneric = {
+	name: string,
+	description?: string,
+	required?: boolean,
+	nameLocalizations?: Record<string, string>,
+	descriptionLocalizations?: Record<string, string>,
+};
+
+// Covers: Number, Integer.
+export type IDiscordOptionsExtended = IDiscordOptionsGeneric & {
+	choices?: IDiscordOptionChoice[],
+	autocomplete?: boolean,
+	minValue?: number,
+	maxValue?: number,
+};
+
+// Covers String.
+export type IDiscordOptionsString = Omit<IDiscordOptionsExtended, 'minValue' | 'maxValue'> & {
+	minLength?: number,
+	maxLength?: number,
+};
+
+// Covers : Command.
+export type IDiscordOptionsCommand = Omit<IDiscordOptionsGeneric, 'required'> & {
+	contexts?: RestOrArray<InteractionContextType>,
+	defaultMemberPermissions?: Permissions | bigint | number | null | undefined,
+	// integrationTypes?: unknown,
+	nsfw?: boolean,
+};
+
+// Covers: any.
+export type IDiscordOptions = IDiscordOptionsGeneric | IDiscordOptionsExtended | IDiscordOptionsString;
+
+// Covers: SubCommand.
+export type IDiscordOptionsSubCommand = Omit<IDiscordOptionsGeneric, 'required'>;
+
+export type IDiscordOptionsGroup = {
+	type: IDiscordOptionType,
+	options: IDiscordOptions,
+};

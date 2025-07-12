@@ -22,7 +22,9 @@ export default function Thread(
 	flags?: () => Record<string, string | number>,
 ) {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'thread');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('thread');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('filename', 'thread')(target, filename);
 		Utils.setMeta('flags', 'thread')(target, flags);
 	};

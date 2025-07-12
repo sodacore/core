@@ -34,20 +34,19 @@ export default class WsService extends BaseService {
 		for (const module of modules) {
 
 			// Define the variables
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
 
 			// Check for valid type and service it is for.
-			if (!type || !services.includes('ws')) continue;
+			if (types.length === 0 || !services.includes('ws')) continue;
 
 			// If a middleware type.
-			if (type === 'middleware') {
+			if (types.includes('middleware')) {
 				this.middlewares.push(module);
-				continue;
 			}
 
 			// If a controller type.
-			if (type === 'controller') {
+			if (types.includes('controller')) {
 
 				// Define the namespace.
 				const namespace = Utils.getMeta('namespace', 'ws')(module.constructor);

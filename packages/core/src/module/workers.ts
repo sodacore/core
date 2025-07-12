@@ -24,13 +24,13 @@ export default class Workers extends BaseModule {
 		for (const module of modules) {
 
 			// Define the variables
-			const type = Utils.getMeta<string>('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const uid = Utils.getMeta<string>('uid', 'worker')(module.constructor);
 			const filename = Utils.getMeta<string>('filename', 'worker')(module.constructor);
 			const options = Utils.getMeta<IWorkerOptions>('options', 'worker')(module.constructor, undefined, {});
 
 			// If a worker type.
-			if (type !== 'worker') continue;
+			if (!types.includes('worker')) continue;
 
 			// Create the controller definition.
 			this.controllers[uid] = {

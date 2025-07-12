@@ -13,7 +13,9 @@ import { Utils } from '@sodacore/di';
  */
 export default function Task(schedule?: string, settings?: ITaskSettings) {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'task');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('task');
+		Utils.setMeta('type', 'autowire')(target, types);
 		Utils.setMeta('schedule', 'task')(target, schedule ?? 'manual');
 		Utils.setMeta('settings', 'task')(target, settings || {});
 	};

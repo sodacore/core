@@ -1,7 +1,8 @@
-import type { IConfig, IRouterControllerMethodItem } from '../types';
+import type { IConfig, IDiscordOptionsCommand, IDiscordOptionsGroup, IDiscordOptionsSubCommand, IRouterControllerMethodItem } from '../types';
 import { Inject, Provide, Utils } from '@sodacore/di';
 import { Registry } from '@sodacore/registry';
 import { Client, ContextMenuCommandBuilder, REST, Routes, SharedSlashCommand } from 'discord.js';
+import { toBuilder } from '../helper/slash-commands';
 
 @Provide()
 export default class SlashCommandsProvider {
@@ -138,18 +139,38 @@ export default class SlashCommandsProvider {
 		// Get all discord controllers.
 		const modules = Registry.all();
 		for (const module of modules) {
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
-			if (!type || !services.includes('discord')) continue;
+			if (types.length === 0 || !services.includes('discord')) continue;
 			controllers.push(module);
 		}
 
 		// Now let's get all the slash commands.
 		const commands = controllers.map(controller => {
 			const builder: SharedSlashCommand = Utils.getMeta('builder', 'discord')(controller.constructor);
-			if (!builder) return null;
-			return builder.toJSON();
+			if (builder) {
+				return builder.toJSON();
+			} else {
+				const builderOptions: IDiscordOptionsCommand = Utils.getMeta('options', 'discord')(controller.constructor, undefined, {});
+				if (!builderOptions || !builderOptions.name) return null;
+				console.log(builderOptions);
+
+				const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(controller, undefined, []);
+				methods.forEach(method => {
+					const subCommand = Utils.getMeta<IDiscordOptionsSubCommand | null>('subcommand', 'discord')(controller, method.key, null);
+					if (!subCommand) throw new Error(`Method ${method.key} is missing a subcommand definition.`);
+					method.subCommand = subCommand;
+					method.options = Utils.getMeta<IDiscordOptionsGroup[]>('options', 'discord')(controller, method.key, []).reverse();
+				});
+
+				console.dir(toBuilder(builderOptions, methods).toJSON(), { depth: null });
+
+				return toBuilder(builderOptions, methods).toJSON();
+			};
 		}).filter(Boolean);
+
+		console.log(commands);
+		return;
 
 		// Now get the context menu commands.
 		const contextMenuCommands = controllers.map(controller => {

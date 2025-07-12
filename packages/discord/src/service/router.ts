@@ -1,8 +1,9 @@
-import type { IAuthFunctionItem, IControllerMethodArgItem, IRouterControllerItem, IRouterControllerMethodItem } from '../types';
+import type { IAuthFunctionItem, IControllerMethodArgItem, IDiscordOptionsCommand, IDiscordOptionsGroup, IDiscordOptionsSubCommand, IRouterControllerItem, IRouterControllerMethodItem } from '../types';
 import { AutocompleteInteraction, ButtonInteraction, ChatInputCommandInteraction, Client, ClientEventTypes, ContextMenuCommandInteraction, GuildMember, Interaction, ModalSubmitInteraction, SharedSlashCommand, StringSelectMenuInteraction, User } from 'discord.js';
 import { Registry } from '@sodacore/registry';
 import { Utils } from '@sodacore/di';
 import { Logger } from '@sodacore/core';
+import { toBuilder } from '../helper/slash-commands';
 
 export default class Router {
 	private controllers: IRouterControllerItem[] = [];
@@ -18,19 +19,38 @@ export default class Router {
 		for (const module of modules) {
 
 			// Validate the type and service.
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
 			const services = Utils.getMeta<string[]>('services', 'controller')(module.constructor, undefined, []);
-			if (type !== 'controller' || !services.includes('discord')) continue;
+			if (!types.includes('controller') || !services.includes('discord')) continue;
 
 			// Collect the commands.
 			const builder: SharedSlashCommand | null = Utils.getMeta('builder', 'discord')(module.constructor);
-			const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(module, undefined, []);
-			this.controllers.push({
-				className: module.constructor.name,
-				name: builder?.name ?? null,
-				methods,
-				module,
-			});
+			const builderOptions: IDiscordOptionsCommand | null = Utils.getMeta('options', 'discord')(module.constructor, undefined, null);
+
+			// If builder, then call that directly, otherwise check for valid options.
+			if (builder) {
+				const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(module, undefined, []);
+				this.controllers.push({
+					className: module.constructor.name,
+					name: builder?.name ?? null,
+					methods,
+					module,
+				});
+			} else if (builderOptions?.name) {
+
+				// Loop the methods and attach the options.
+				const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(module, undefined, []);
+				methods.forEach(method => {
+					const subCommand = Utils.getMeta<IDiscordOptionsSubCommand | null>('subcommand', 'discord')(module, method.key, null);
+					if (!subCommand) throw new Error(`Method ${method.key} is missing a subcommand definition.`);
+					method.subCommand = subCommand;
+					method.options = Utils.getMeta<IDiscordOptionsGroup[]>('options', 'discord')(module, method.key, []).reverse();
+				});
+
+				// Create the builder and assign it back.
+				const builder = toBuilder(builderOptions, methods);
+				Utils.setMeta('builder', 'discord')(module.constructor, builder);
+			}
 		}
 	}
 

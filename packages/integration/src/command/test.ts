@@ -45,10 +45,4 @@ export default class TestCommand {
 		]);
 		return `You selected: ${choice}`;
 	}
-
-	@On.SubCommand('modal')
-	public async onModal(@Interaction() interaction: ChatInputCommandInteraction) {
-		const data = await this.prompts.modal(interaction, 'Test Modal');
-		return `You submitted: ${JSON.stringify(data)}`;
-	}
 }

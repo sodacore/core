@@ -9,6 +9,8 @@ import { Utils } from '@sodacore/di';
  */
 export default function Service() {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'service');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('service');
+		Utils.setMeta('type', 'autowire')(target, types);
 	};
 }

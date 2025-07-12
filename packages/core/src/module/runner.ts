@@ -25,8 +25,8 @@ export default class Runner extends BaseModule {
 	 */
 	public async init() {
 		const tasks: BaseTask[] = Registry.all().filter(module => {
-			const type = Utils.getMeta('type', 'autowire')(module.constructor);
-			if (!type || type !== 'task') return false;
+			const types = Utils.getMeta<string[]>('type', 'autowire')(module.constructor, undefined, []);
+			if (!types.includes('task')) return false;
 			return true;
 		});
 

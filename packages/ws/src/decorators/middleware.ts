@@ -7,7 +7,9 @@ import { Utils } from '@sodacore/di';
  */
 export default function Middleware() {
 	return (target: any) => {
-		Utils.setMeta('type', 'autowire')(target, 'middleware');
+		const types = Utils.getMeta<string[]>('type', 'autowire')(target, undefined, []);
+		types.push('middleware');
+		Utils.setMeta('type', 'autowire')(target, types);
 		const services = Utils.getMeta<string[]>('services', 'controller')(target, undefined, []);
 		services.push('ws');
 		Utils.setMeta('services', 'controller')(target, services);

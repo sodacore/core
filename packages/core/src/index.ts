@@ -22,6 +22,7 @@ import type {
 	IThreadQueueItemWithMeta,
 	IWorkerMessage,
 	IWorkerQueueItem,
+	MaybeArray,
 	MaybePromise,
 } from './types';
 import BaseModule from './base/module';
@@ -87,6 +88,7 @@ export type {
 	IThreadQueueItemWithMeta,
 	IWorkerMessage,
 	IWorkerQueueItem,
+	MaybeArray,
 	MaybePromise,
 };
 

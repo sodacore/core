@@ -1,4 +1,4 @@
-import type { IConfig, ITranslation } from '../types';
+import type { IConfig, IQuery, ITranslation } from '../types';
 import { BaseService, Service } from '@sodacore/core';
 import { Inject } from '@sodacore/di';
 import { Glob } from 'bun';
@@ -43,9 +43,26 @@ export default class I18nService extends BaseService {
 	public translate(query: string, languageCode: string, fallback?: string) {
 		if (!this._hasTranslations) throw new Error('[I18N]: No translations available.');
 		if (this.translations[languageCode]) {
-			return this.translations[languageCode][query] || (fallback ?? query); // Return the translation or the original query if not found.
+			return this.translations[languageCode][query] || (fallback ?? query);
 		}
-		return (fallback ?? query); // Return the original query if the language code is not found.
+		return (fallback ?? query);
+	}
+
+	public translateMultiple(queries: IQuery[], languageCode: string) {
+		if (!this._hasTranslations) {
+			return queries.map(query => ({
+				...query,
+				translated: query.value ?? query.original,
+			}));
+		}
+
+		return queries.map(query => {
+			const translated = this.translate(query.value, languageCode, query.value ?? query.original);
+			return {
+				...query,
+				translated,
+			};
+		});
 	}
 
 	public getAvailableLanguages(lower?: boolean) {
@@ -60,7 +77,6 @@ export default class I18nService extends BaseService {
 		const glob = new Glob(`*.json`);
 
 		try {
-			// Scan and add the files.
 			for await (const file of glob.scan({
 				cwd: this.translationsPath,
 				onlyFiles: true,

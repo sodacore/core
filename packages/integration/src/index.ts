@@ -17,11 +17,7 @@ const app = new Application({
 });
 
 // Install the Prisma plugin.
-app.use(new PrismaPlugin({
-	// onInit: prisma => {
-	// 	console.log('Prisma client initialised.', typeof prisma.user);
-	// },
-}));
+app.use(new PrismaPlugin());
 
 // Install the HTTP plugin.
 app.use(new HttpPlugin({
@@ -30,6 +26,12 @@ app.use(new HttpPlugin({
 
 // Install the WebSocket plugin.
 app.use(new WsPlugin());
+
+// app.use(new ThorpePlugin({
+// 	as: 'client',
+// 	hostname: 'localhost',
+// 	port: 14500,
+// }));
 
 // Install the i18n plugin.
 app.use(new I18nPlugin({

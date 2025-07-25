@@ -12,11 +12,11 @@ export default function TranslateTransform(
 
 	// Get the translatior.
 	const translator = Registry.get<I18nProvider>(I18nProvider.name);
-	const availableLanguageCode = translator.getAvailableTranslation(acceptLanguage);
+	const bestLocale = translator.getBestLocale(acceptLanguage);
 
 	// If no available language code is found, or the response is not a string or object,
 	if (
-		!availableLanguageCode
+		!bestLocale
 		|| (
 			typeof response !== 'string'
 			&& typeof response !== 'object'
@@ -25,6 +25,9 @@ export default function TranslateTransform(
 		return response;
 	}
 
+	// If the response is of type response, return as is.
+	if (response instanceof Response) return response;
+
 	// If the response is a string or object, we will transform it.
-	return translator.autoTranslate(response, availableLanguageCode);
+	return translator.autoTranslate(response, bestLocale);
 }

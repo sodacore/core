@@ -5,6 +5,8 @@ import type Application from './module/application';
 import type Logger from './provider/logger';
 
 export type Constructor<K> = { new(): K };
+export type MaybeArray<T> = T | T[];
+export type MaybePromise<T> = T | Promise<T>;
 
 export type IHookType = 'preInit' | 'postInit' | 'preStart' | 'postStart' | 'preStop' | 'postStop' | string;
 export type ILoggerType = 'info' | 'warn' | 'error';
@@ -192,5 +194,3 @@ export type ILogMessage = {
 	message: string,
 	formatted: string,
 };
-
-export type MaybePromise<T> = T | Promise<T>;

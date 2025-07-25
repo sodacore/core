@@ -3,16 +3,16 @@
 	"version": "0.3.32",
 	"module": "false",
 	"dependencies": {
-		"bun": "^1.2.9",
+		"bun": "^1.2.19",
 		"chalk": "^5.4.1"
 	},
 	"devDependencies": {
-		"@antfu/eslint-config": "^4.12.0",
-		"@types/bun": "^1.2.9",
+		"@antfu/eslint-config": "^4.19.0",
+		"@types/bun": "^1.2.19",
 		"@types/common-tags": "^1.8.4",
-		"@types/node": "^22.14.1",
+		"@types/node": "^22.16.5",
 		"bun-plugin-dts": "^0.3.0",
-		"eslint": "^9.24.0",
+		"eslint": "^9.32.0",
 		"eslint-plugin-format": "^1.0.1",
 		"typescript": "^5.8.3"
 	},

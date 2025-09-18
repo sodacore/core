@@ -14,10 +14,10 @@
 	"main": "dist/index.js",
 	"module": "false",
 	"devDependencies": {
-		"@types/bun": "^1.2.15"
+		"@types/bun": "^1.2.22"
 	},
 	"peerDependencies": {
-		"typescript": "^5.6.3"
+		"typescript": "^5.9.2"
 	},
 	"bin": {
 		"bunz": "bin/main.js"
@@ -63,6 +63,6 @@
 	"type": "module",
 	"dependencies": {
 		"@clack/prompts": "^0.11.0",
-		"chalk": "^5.5.0"
+		"chalk": "^5.6.2"
 	}
 }

@@ -36,7 +36,7 @@
 		"directory": "packages/integration"
 	},
 	"dependencies": {
-		"@prisma/client": "^6.9.0",
+		"@prisma/client": "^6.16.2",
 		"@sodacore/cli": "workspace:*",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
@@ -45,16 +45,15 @@
 		"@sodacore/i18n": "workspace:*",
 		"@sodacore/prisma": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"@sodacore/ui": "workspace:*",
 		"@sodacore/ws": "workspace:*",
-		"discord.js": "^15.0.0-dev.1741392619-ab6a69401",
-		"prisma": "^6.9.0",
-		"uuid": "^11.0.2"
+		"discord.js": "^15.0.0-dev.1757851336-b66f52f9a",
+		"prisma": "^6.16.2",
+		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5.6.3"
+		"typescript": "^5.9.2"
 	}
 }

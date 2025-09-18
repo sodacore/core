@@ -55,15 +55,15 @@
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5.3.3"
+		"typescript": "^5.9.2"
 	},
 	"dependencies": {
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/http": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"discord.js": "^15.0.0-dev.1741392619-ab6a69401",
-		"reflect-metadata": "^0.2.1",
-		"uuid": "^11.0.2"
+		"discord.js": "^15.0.0-dev.1757851336-b66f52f9a",
+		"reflect-metadata": "^0.2.2",
+		"uuid": "^13.0.0"
 	}
 }

@@ -18,11 +18,12 @@ Sodacore is a bun-powered framework for building server-side applications utilis
 </p>
 </div>
 
-![Contributors](https://img.shields.io/github/contributors/sodacore/core?color=dark-green)
-![Issues](https://img.shields.io/github/issues/sodacore/core)
-![License](https://img.shields.io/npm/l/%40sodacore%2Fcore)
-![Downloads](https://img.shields.io/npm/d18m/%40sodacore%2Fcore)
-![Latest Version](https://img.shields.io/npm/v/%40sodacore%2Fcore?label=latest)
+[![Contributors](https://img.shields.io/github/contributors/sodacore/core?color=dark-green)](https://github.com/sodacore/core/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/sodacore/core)](https://github.com/sodacore/core/issues)
+[![License](https://img.shields.io/npm/l/%40sodacore%2Fcore)](https://github.com/sodacore/core/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/npm/d18m/%40sodacore%2Fcore)](https://www.npmjs.com/package/@sodacore/core)
+[![Latest Version](https://img.shields.io/npm/v/%40sodacore%2Fcore?label=latest)](https://github.com/sodacore/core/releases)
+[![Made for Bun](https://img.shields.io/badge/made%20for-bun-25A2E2?style=flat-square&logo=bun)](https://bun.sh)
 
 ## Table of Contents
 

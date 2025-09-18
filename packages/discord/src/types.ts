@@ -127,3 +127,7 @@ export type IDiscordOptionsGroup = {
 	type: IDiscordOptionType,
 	options: IDiscordOptions,
 };
+
+export type IDiscordOptionsCommandWithExtra = IDiscordOptionsCommand & {
+	subCommands?: IDiscordOptionsSubCommand[],
+}

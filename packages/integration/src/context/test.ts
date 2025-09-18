@@ -13,7 +13,7 @@ export default class TestContextMenu {
 	}
 
 	@Add.MessageContext('Get Message Content')
-	@Auth.HasRole('something')
+	@Auth.HasRole('1163524878712963110')
 	public async getMessageContent(@Interaction() interaction: MessageContextMenuCommandInteraction) {
 		await interaction.reply({
 			content: `Message content: ${interaction.targetMessage.content}`,

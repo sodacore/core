@@ -1,6 +1,5 @@
 import { Application } from '@sodacore/core';
 import HttpPlugin from '@sodacore/http';
-// import UiPlugin from '@sodacore/ui';
 import DiscordPlugin from '@sodacore/discord';
 import WsPlugin from '@sodacore/ws';
 import I18nPlugin from '@sodacore/i18n';
@@ -27,19 +26,12 @@ app.use(new HttpPlugin({
 // Install the WebSocket plugin.
 app.use(new WsPlugin());
 
-// app.use(new ThorpePlugin({
-// 	as: 'client',
-// 	hostname: 'localhost',
-// 	port: 14500,
-// }));
-
 // Install the i18n plugin.
 app.use(new I18nPlugin({
-	defaultLang: 'en',
+	defaultLocale: 'en',
+	enableFileLookup: true,
+	overrideGetParam: 'locale',
 }));
-
-// Install the UI plugin.
-// app.use(new UiPlugin({}));
 
 app.use(new DiscordPlugin({
 	token: env.DISCORD_TOKEN,

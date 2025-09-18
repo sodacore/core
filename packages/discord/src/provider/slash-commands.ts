@@ -151,9 +151,9 @@ export default class SlashCommandsProvider {
 			if (builder) {
 				return builder.toJSON();
 			} else {
+
 				const builderOptions: IDiscordOptionsCommand = Utils.getMeta('options', 'discord')(controller.constructor, undefined, {});
 				if (!builderOptions || !builderOptions.name) return null;
-				console.log(builderOptions);
 
 				const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(controller, undefined, []);
 				methods.forEach(method => {
@@ -163,14 +163,9 @@ export default class SlashCommandsProvider {
 					method.options = Utils.getMeta<IDiscordOptionsGroup[]>('options', 'discord')(controller, method.key, []).reverse();
 				});
 
-				console.dir(toBuilder(builderOptions, methods).toJSON(), { depth: null });
-
 				return toBuilder(builderOptions, methods).toJSON();
 			};
 		}).filter(Boolean);
-
-		console.log(commands);
-		return;
 
 		// Now get the context menu commands.
 		const contextMenuCommands = controllers.map(controller => {

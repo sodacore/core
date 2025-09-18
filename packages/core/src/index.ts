@@ -35,6 +35,7 @@ import BaseWorker from './base/worker';
 import ScriptContext from './context/script';
 import ThreadContext from './context/thread';
 import Autoload from './decorator/autoload';
+import Catch from './decorator/catch';
 import Command from './decorator/command';
 import Configure from './decorator/configure';
 import Controller from './decorator/controller';
@@ -102,6 +103,7 @@ export {
 	BaseTask,
 	BaseThread,
 	BaseWorker,
+	Catch,
 	Command,
 	Configure,
 	Constants,

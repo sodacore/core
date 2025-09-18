@@ -130,6 +130,7 @@ export default config({
 		'packages/**/*.d.ts',
 	],
 	rules: {
+		'ts/method-signature-style': 0,
 		'ts/no-use-before-define': 0,
 		'ts/no-unused-expressions': 0,
 		'ts/consistent-type-definitions': 0,

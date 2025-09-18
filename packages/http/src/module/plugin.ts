@@ -3,6 +3,7 @@ import { type Application, BasePlugin, type IPlugin, Utils } from '@sodacore/cor
 import { file } from 'bun';
 import SseConnectionsProvider from '../provider/sse-connections';
 import HttpService from '../service/http';
+import CorsMiddleware from '../middlewares/cors';
 
 /**
  * Initialises the package file and pulls the data from that
@@ -48,5 +49,8 @@ export default class HttpPlugin extends BasePlugin implements IPlugin {
 	public async install(app: Application) {
 		app.register(SseConnectionsProvider);
 		app.register(HttpService);
+		if (this.config.builtInMiddlewares?.cors) {
+			app.register(CorsMiddleware);
+		}
 	}
 }

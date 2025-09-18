@@ -1,6 +1,8 @@
 export type IConfig = {
 	defaultLocale?: string,
-	translationsPath?: string,
+	enableFileLookup?: boolean,
+	fileTranslationsPath?: string,
+	overrideGetParam?: string,
 };
 
 export type ITranslation = {
@@ -21,4 +23,11 @@ export type IQuery = {
 	original: string,
 	value: string,
 	translated?: string,
+};
+
+export interface ILookup {
+	supports(locale: string): Promise<boolean>,
+	getAvailableLanguages(): Promise<string[]>,
+	onTranslate(query: string, languageCode: string, fallback?: string): Promise<string>,
+	onTranslateMultiple(queries: IQuery[], languageCode: string): Promise<IQuery[]>,
 };

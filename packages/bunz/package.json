@@ -1,0 +1,68 @@
+{
+	"name": "@sodacore/bunz",
+	"version": "0.3.32",
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/bunz"
+	},
+	"main": "dist/index.js",
+	"module": "false",
+	"devDependencies": {
+		"@types/bun": "^1.2.15"
+	},
+	"peerDependencies": {
+		"typescript": "^5.6.3"
+	},
+	"bin": {
+		"bunz": "bin/main.js"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"description": "Sodacore bunz is a plugin that adds extra workspace and utility functionality via the CLI.",
+	"engines": {
+		"bun": ">=1.1.20"
+	},
+	"files": [
+		"dist"
+	],
+	"homepage": "https://sodacore.dev",
+	"keywords": [
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"cli",
+		"command-line",
+		"interface",
+		"commands",
+		"workspace",
+		"workspaces",
+		"utility",
+		"utilities",
+		"helper"
+	],
+	"license": "Apache-2.0",
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"build:watch": "tsc --watch"
+	},
+	"type": "module",
+	"dependencies": {
+		"@clack/prompts": "^0.11.0",
+		"chalk": "^5.5.0"
+	}
+}

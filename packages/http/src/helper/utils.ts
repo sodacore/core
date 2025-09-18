@@ -8,21 +8,45 @@ import type HttpContext from '../context/http';
  * @returns boolean
  */
 export function doesRouteMatch(path: string, value: string) {
+	const pathParts = path.split('/').filter(part => part.length > 0);
+	const valueParts = value.split('/').filter(part => part.length > 0);
 
-	// Let's take the path and split it.
-	const parts = path.split('/')
-		.filter(part => part.length > 0)
-		.map(part => {
-			if (part.startsWith(':')) return '[^/]+';
-			if (part === '*') return '.*';
-			return part;
-		});
+	let pathIndex = 0;
+	let valueIndex = 0;
 
-	// Build the regex.
-	const regex = new RegExp(`^/${parts.join('/')}\/?$`, 'gi');
+	// Loop the parts.
+	while (pathIndex < pathParts.length && valueIndex < valueParts.length) {
+		const pathPart = pathParts[pathIndex];
+		const valuePart = valueParts[valueIndex];
 
-	// Test the value.
-	return regex.test(value);
+		if (pathPart === '*') {
+			return true;
+		} else if (pathPart.startsWith('?:')) {
+			pathIndex++;
+			valueIndex++;
+		} else if (pathPart.startsWith(':')) {
+			pathIndex++;
+			valueIndex++;
+		} else if (pathPart === valuePart) {
+			pathIndex++;
+			valueIndex++;
+		} else {
+			return false;
+		}
+	}
+
+	// Check for remaining parts
+	while (pathIndex < pathParts.length) {
+		if (pathParts[pathIndex] === '*') {
+			return true;
+		} else if (pathParts[pathIndex].startsWith('?:')) {
+			pathIndex++;
+		} else {
+			return false;
+		}
+	}
+
+	return valueIndex === valueParts.length;
 }
 
 /**

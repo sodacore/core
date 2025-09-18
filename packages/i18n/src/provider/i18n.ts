@@ -1,80 +1,60 @@
-import type { IConfig, IParsedLanguage, IQuery } from '../types';
 import { Inject, Provide } from '@sodacore/di';
 import I18nService from '../service/i18n';
+import type { IQuery } from '../types';
 import { REGEX_TRANSLATION_TAG, REGEX_TRANSLATION_TAG_QUERY } from '../helper/constants';
+import { getBestLocale } from '../helper/utils';
 
 @Provide()
 export default class I18nProvider {
-	@Inject('@i18n:config') private config?: IConfig;
 	@Inject() private i18nService!: I18nService;
 
-	public parseLocaleHeader(acceptedLanguages: string) {
-		return acceptedLanguages
-			.split(',')
-			.map(part => {
-				const [locale, qValue] = part.trim().split(';q=');
-				const [language, region] = locale.trim().split('-');
-				return {
-					locale: locale.trim(),
-					quality: qValue ? Number.parseFloat(qValue) : 1.0,
-					language: language.toLowerCase(),
-					region: region?.toUpperCase(),
-				};
-			})
-			.sort((a, b) => b.quality - a.quality);
+	public async getBestLocale(acceptedLanguage: string) {
+		const availableLanguages = await this.getAvailableLanguages();
+		return getBestLocale(acceptedLanguage, availableLanguages);
 	}
 
-	private scoreLocaleMatch(requested: IParsedLanguage, supported: string): number {
-		const [supportedLang, supportedRegion] = supported.split('-');
-		const languageMatches = requested.language === supportedLang.toLowerCase();
-		const regionMatches = requested.region === supportedRegion?.toUpperCase();
-
-		if (languageMatches && regionMatches) return 100;
-		if (languageMatches && requested.region) return 80; // specific region requested, different matched
-		if (languageMatches && !requested.region) return 60; // language-only match
-
-		return 0;
-	}
-
-	public getBestLocale(acceptLanguageHeader: string): string {
-		const parsedLanguages = this.parseLocaleHeader(acceptLanguageHeader);
-		let bestMatch: { locale: string, score: number } | null = null;
-
-		for (const requested of parsedLanguages) {
-			for (const supported of this.i18nService.getAvailableLanguages()) {
-				const score = this.scoreLocaleMatch(requested, supported) * requested.quality;
-
-				if (!bestMatch || score > bestMatch.score) {
-					bestMatch = { locale: supported, score };
-				}
+	public async getAvailableLanguages() {
+		const lookups = this.i18nService.getLookups();
+		const availableLanguages: string[] = [];
+		for (const lookup of lookups) {
+			const langs = await lookup.getAvailableLanguages();
+			if (langs && Array.isArray(langs)) {
+				availableLanguages.push(...langs);
 			}
 		}
-
-		return bestMatch?.locale || this.config?.defaultLocale || 'en-GB';
+		return availableLanguages;
 	}
 
-	public t(query: string, languageCode: string, fallback?: string) {
-		return this.translate(query, languageCode, fallback);
+	public async translate(locale: string, query: string, fallback?: string) {
+		const lookups = this.i18nService.getLookups();
+		for (const lookup of lookups) {
+			if (await lookup.supports(locale)) {
+				return await lookup.onTranslate(query, locale, fallback);
+			}
+		}
+		return fallback ?? query;
 	}
 
-	public translate(query: string, languageCode: string, fallback?: string) {
-		return this.i18nService.translate(query, languageCode ?? this.config?.defaultLocale, fallback);
+	public async batchTranslate(locale: string, queries: IQuery[]) {
+		const lookups = this.i18nService.getLookups();
+		for (const lookup of lookups) {
+			if (await lookup.supports(locale)) {
+				return await lookup.onTranslateMultiple(queries, locale);
+			}
+		}
+		return queries.map(query => ({
+			...query,
+			translated: query.value || query.original,
+		}));
 	}
 
-	public translateMultiple(queries: IQuery[], languageCode: string) {
-		return this.i18nService.translateMultiple(
-			queries,
-			languageCode ?? this.config?.defaultLocale,
-		);
-	}
-
-	public autoTranslate(response: string | Array<any> | Record<string, any>, languageCode: string) {
+	public async autoTranslate(response: string | Array<any> | Record<string, any>, locale: string) {
 		const isObject = typeof response === 'object';
 		const value = isObject ? JSON.stringify(response) : response;
 
 		// Get the matches, if none, return the query.
 		const matches = this.getTranslateMatches(value);
-		if (matches.length === 0) return value;
+		if (matches.length === 0) return isObject ? JSON.parse(value) : value;
 
 		// Set the data as the query.
 		let data = String(value);
@@ -88,7 +68,7 @@ export default class I18nProvider {
 		});
 
 		// Now pass this to the translateMultiple method.
-		const translatedItems = this.translateMultiple(itemsToTranslate, languageCode);
+		const translatedItems = await this.batchTranslate(locale, itemsToTranslate);
 
 		// Loop the matches and replace the translated text.
 		translatedItems.forEach(item => {

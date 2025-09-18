@@ -3,6 +3,7 @@ import { type Application, BasePlugin, type IPlugin, Utils } from '@sodacore/cor
 import { file } from 'bun';
 import I18nService from '../service/i18n';
 import I18nProvider from '../provider/i18n';
+import FileLookup from '../lookup/file';
 
 const packageJson = file(Utils.resolve(import.meta.dirname, '../../package.json'));
 if (!await packageJson.exists()) throw new Error('Package.json not found.');
@@ -20,6 +21,7 @@ export default class I18nPlugin extends BasePlugin implements IPlugin {
 	}
 
 	public async install(app: Application) {
+		if (this.config.enableFileLookup) app.register(FileLookup);
 		app.register(I18nProvider);
 		app.register(I18nService);
 	}

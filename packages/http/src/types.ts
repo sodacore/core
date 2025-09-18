@@ -8,6 +8,9 @@ export type IConfig = {
 	port: number,
 	host?: string,
 	ssePath?: string, // [See docs for manual setup].
+	builtInMiddlewares?: {
+		cors?: boolean,
+	},
 };
 
 export type IControllerMetaMethodItem = {

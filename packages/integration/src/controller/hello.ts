@@ -1,4 +1,4 @@
-import { Controller, Get } from '@sodacore/http';
+import { Controller, Get, Params } from '@sodacore/http';
 
 @Controller('/hello')
 export default class HelloController {
@@ -19,8 +19,11 @@ export default class HelloController {
 	}
 
 	@Get('/test4/:id/name/?:name')
-	public async test4() {
-		return 'test4';
+	public async test4(
+		@Params('id') id: string,
+		@Params('name') name?: string,
+	) {
+		return `test4 ${id} ${name || 'no'}`;
 	}
 
 	@Get('/test5/*')

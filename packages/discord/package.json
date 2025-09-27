@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/discord",
 	"description": "Sodacore Discord is a plugin that offers Discord SSO/OAuth2 support and the ability to create bots in a similar controller pattern.",
-	"version": "0.3.32",
+	"version": "0.3.35",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",
@@ -62,7 +62,7 @@
 		"@sodacore/di": "workspace:*",
 		"@sodacore/http": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"discord.js": "^15.0.0-dev.1757851336-b66f52f9a",
+		"discord.js": "15.0.0-dev.1741392619-ab6a69401",
 		"reflect-metadata": "^0.2.2",
 		"uuid": "^13.0.0"
 	}

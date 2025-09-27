@@ -65,10 +65,12 @@ export function getRouteParams(route: string, path: string) {
 	// Loop the route parts.
 	const params: { [key: string]: string } = {};
 	for (let i = 0; i < routeParts.length; i++) {
-
-		// If a param.
-		if (routeParts[i].startsWith(':')) {
-			params[routeParts[i].slice(1)] = pathParts[i];
+		if (routeParts[i].startsWith(':') || routeParts[i].startsWith('?:')) {
+			params[
+				routeParts[i].startsWith(':')
+					? routeParts[i].slice(1)
+					: routeParts[i].slice(2)
+			] = pathParts[i];
 		}
 	}
 

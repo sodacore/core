@@ -35,9 +35,9 @@ export default class PromptsHelper {
 
 		// Send the message.
 		if (interaction.replied) {
-			await interaction.editReply({ embeds: [embed], components: [buttonRow] });
+			await interaction.editReply({ embeds: [embed], components: [buttonRow as any] });
 		} else {
-			response = await interaction.reply({ embeds: [embed], components: [buttonRow], withResponse: true });
+			response = await interaction.reply({ embeds: [embed], components: [buttonRow as any], withResponse: true });
 		}
 
 		// Wait for the response.
@@ -80,9 +80,9 @@ export default class PromptsHelper {
 
 		// Send the message.
 		if (interaction.replied) {
-			await interaction.editReply({ embeds: [embed], components: [choiceRow] });
+			await interaction.editReply({ embeds: [embed], components: [choiceRow as any] });
 		} else {
-			response = await interaction.reply({ embeds: [embed], components: [choiceRow], withResponse: true });
+			response = await interaction.reply({ embeds: [embed], components: [choiceRow as any], withResponse: true });
 		}
 
 		// Wait for the response.

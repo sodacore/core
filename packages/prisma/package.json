@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/prisma",
 	"description": "Sodacore Prisma is a plugin that initialises the Prisma ORM within your project.",
-	"version": "0.3.35",
+	"version": "0.3.36",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",
@@ -58,15 +58,15 @@
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
 		"@mrleebo/prisma-ast": "^0.13.0",
-		"@prisma/client": "^6.16.2",
+		"@prisma/client": "^6.16.3",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"prisma": "^6.16.2",
+		"prisma": "^6.16.3",
 		"reflect-metadata": "^0.2.2"
 	}
 }

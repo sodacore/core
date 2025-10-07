@@ -1,20 +1,20 @@
 {
 	"name": "@sodacore/monorepo",
-	"version": "0.3.35",
+	"version": "0.3.36",
 	"module": "false",
 	"dependencies": {
-		"bun": "^1.2.22",
+		"bun": "^1.2.23",
 		"chalk": "^5.6.2"
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^5.4.1",
-		"@types/bun": "^1.2.22",
+		"@types/bun": "^1.2.23",
 		"@types/common-tags": "^1.8.4",
-		"@types/node": "^24.5.2",
+		"@types/node": "^24.7.0",
 		"bun-plugin-dts": "^0.3.0",
-		"eslint": "^9.36.0",
+		"eslint": "^9.37.0",
 		"eslint-plugin-format": "^1.0.2",
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.3"
 	},
 	"private": true,
 	"scripts": {

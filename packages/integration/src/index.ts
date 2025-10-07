@@ -11,7 +11,7 @@ import { GatewayIntentBits } from 'discord.js';
 const app = new Application({
 	autowire: true,
 	password: 'test123',
-	hostname: '0.0.0.0',
+	hostname: '127.0.0.1',
 	enableCli: true,
 });
 

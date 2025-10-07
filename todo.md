@@ -4,6 +4,10 @@
 
 - [CORE]: Question the design of Threads, and look into better alternative use cases for them, as currently, they are just Workers with extra steps.
 - [HTTP]: Add a HTTP cache decorator for LRU caching some responses.
+- [HTTP]: Update the CorsMiddleware to use the new format.
+- [CLI]: Setup the `bun create` command to use the latest stable version of Sodacore, not the alpha version.
+- [UNKNOWN]: Look into creating a specification for a decentralised communication platform, the aim here is to build in a way that allows servers to communicate with each other, and potentially allow for federation in the future.
+- [UNKNOWN]: ^ Potentially an implementation of a signaling server that can be used for finding peers, the idea being is each "instance" of a server can register with a (or many) signalling server(s), and then can find other peers to communicate with, this could be used for decentralised chat systems, etc, the aim here is servers can act as one, but also can be used to talk, signaling servers would not be aware of the content, just the peers and essentially act, almost like a DNS for servers.
 
 ## Documentation To-Do:
 
@@ -30,6 +34,7 @@
 - Document the new i18n package and it's new methods, and how to utilise lookups.
 - Document the new ability for workers to wrap controllers of simplistic nature.
 - Document the new discord functionality, including the new declarative command system, and how to use it.
+- Create a concepts section that talks about concepts, controllers, workers, tasks, etc and _in-detail_ describes them and how to use them.
 
 ### Potential Features:
 

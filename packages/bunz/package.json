@@ -14,10 +14,10 @@
 	"main": "dist/index.js",
 	"module": "false",
 	"devDependencies": {
-		"@types/bun": "^1.2.22"
+		"@types/bun": "^1.2.23"
 	},
 	"peerDependencies": {
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.3"
 	},
 	"bin": {
 		"bunz": "bin/main.js"

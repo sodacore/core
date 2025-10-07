@@ -53,7 +53,8 @@ Sodacore comes with a lot of great features:
 - 📝 Clean and simple logger that can be extended.
 - 📚 Built-in documentation
 - 🧵 Easy Threading and worker support.
-- 🖥️ CLI for tooling...soon...
+- 🖥️ Create package for quick boilerplating.
+- 🎛️ CLI for managing your application scripts.
 
 The framework is constantly being worked on and improved so suggestions and features are highly appreciated.
 
@@ -61,7 +62,7 @@ The framework is constantly being worked on and improved so suggestions and feat
 
 ### Built With
 
-This project was built with the following technologies:
+This project was built with the following core technologies:
 
 - [Bun](https://bun.sh/)
 - [TypeScript](https://www.typescriptlang.org/)
@@ -84,69 +85,7 @@ This will install and launch the command line, it simply asks you about your pro
 
 ### Manual setup
 
-To start with find a home (folder) for your project, once you have done this, ensure your Bun install is up to date.
-
-If you haven't already install Bun, you can go to their website and follow the instructions. To update Bun, simply call bun upgrade.
-
-Let's initialise a Bun project, you can do this by running:
-
-```bash
-bun init
-```
-
-Ensure you select the "Blank" template.
-
-This will initialise the current project folder, from here, we need to tweak the `tsconfig.json` file due to our use of legacy decorators, add these to the `compilerOptions` section:
-
-```jsonc
-{
-	// ...
-	"compilerOptions": {
-		// ...
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"useDefineForClassFields": false
-	}
-}
-```
-
-You can see ours here: `tsconfig.json`, I would also suggest removing the DOM lib, as this is a server-side project.
-
-Lastly we suggest deleting the `index.ts` file that is at the root, and make yourself a `src` folder.
-
-### Create your entry file
-
-Once you're setup, you can easily get started with the framework by creating yourself an entry file: ./src/main.ts and then put the following code in it:
-
-All documentation will be written in TypeScript going forward.
-
-```ts
-import { Application } from '@sodacore/core';
-import HttpPlugin from '@sodacore/http';
-
-const app = new Application({
-	autowire: true,
-	// Other settings...
-});
-
-app.use(new HttpPlugin({
-	port: 8080,
-}));
-
-app.start().catch(console.error);
-```
-
-### Start the framework
-
-You can start the framework by doing:
-
-We suggested to put it in your package.json under scripts section and then you can do bun dev (set it as the dev script).
-
-```bash
-bun run ./src/main.ts --target=bun
-```
-
-We set the target to Bun by default, so that any additional libraries will force bun as well, but you can omit that flag.
+To setup your project manually, please follow the this [guide](https://sodacore.dev/docs/guide/quickstart.html#manually).
 
 ## Roadmap
 
@@ -161,7 +100,7 @@ Don&#39;t forget to give the project a star! Thanks again!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m &#39;Add some AmazingFeature&#39;`)
+3. Commit your Changes (`git commit -m "Add some AmazingFeature"`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
@@ -178,6 +117,6 @@ If you have any questions or suggestions, feel free to reach out to us:
 
 ## Acknowledgments
 
-A special thanks to the following for their contributions, support and inspiration:
+A special thanks to the following for their contributions, helpful projects, support and inspiration:
 
 - [makeread.me](https://github.com/sodacore/core) - README Template

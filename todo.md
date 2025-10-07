@@ -8,6 +8,7 @@
 - [CLI]: Add a new option to set the default connection, avoiding the need to always pass `--connection` everywhere.
 - [CLI]: Implement a feature that instead of calling the interactive CLI, a user can simply go: `sodacore exec core:usage --connection="Local Instance"` where connection is optional, and if not provided, it will use the default connection (which can be set via another command).
 - [CLI]: Ensure the exec command can simply bypass the interactive CLI, and just run the command directly, this is cleaner for CI/CD systems.
+- [CLI]: Rewrite the package specific documentation.
 
 ## Documentation To-Do:
 

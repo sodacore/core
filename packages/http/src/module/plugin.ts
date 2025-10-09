@@ -49,7 +49,7 @@ export default class HttpPlugin extends BasePlugin implements IPlugin {
 	public async install(app: Application) {
 		app.register(SseConnectionsProvider);
 		app.register(HttpService);
-		if (this.config.builtInMiddlewares?.cors) {
+		if (this.config.builtin?.corsMiddleware) {
 			app.register(CorsMiddleware);
 		}
 	}

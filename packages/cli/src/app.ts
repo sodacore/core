@@ -7,8 +7,15 @@ export default class Application {
 	private exitHandler!: (value?: string) => void;
 	private socket!: Socket<ISocketData>;
 	private commands!: Commands;
+	private answers: string[] = [];
+	private closeAfter = false;
 
-	public constructor(private connection: IConfigConnectionItem) {}
+	public constructor(private connection: IConfigConnectionItem, answers?: string[]) {
+		if (answers) {
+			this.answers = answers;
+			this.closeAfter = true;
+		};
+	}
 
 	public init() {
 		return new Promise<string | undefined>(resolve => {
@@ -16,7 +23,7 @@ export default class Application {
 				if (this.socket) this.socket.end();
 				resolve(value);
 			};
-			this.commands = new Commands(this.exitHandler.bind(this));
+			this.commands = new Commands(this.exitHandler.bind(this), this.answers, this.closeAfter);
 			this.connect();
 		});
 	}
@@ -48,6 +55,13 @@ export default class Application {
 		try {
 			const packet = JSON.parse(data);
 			const { command, context } = packet;
+
+			if (this.closeAfter && command === '_:error') {
+				log.error(`Error: ${context.message}`);
+				this.exitHandler();
+				return;
+			}
+
 			const status = this.commands.handle(command, context);
 			if (!status) log.error(`Command ${command} not found.`);
 		} catch (err) {

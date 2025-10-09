@@ -1,6 +1,5 @@
 import type { ConfirmOptions, MultiSelectOptions, SelectOptions, TextOptions } from '@clack/prompts';
 import type ScriptContext from './context/script';
-import type ThreadContext from './context/thread';
 import type Application from './module/application';
 import type Logger from './provider/logger';
 
@@ -95,28 +94,6 @@ export type IWorkerMessage = {
 	method?: string,
 	args?: any[],
 };
-
-export type IThreadMessage = {
-	uid?: string,
-	command: string,
-	context?: Record<string, any>,
-	isResult?: boolean,
-};
-
-export type IThreadQueueItem = {
-	resolve: (value: unknown) => void,
-	timeout: number,
-	command: string,
-	context?: Record<string, any>,
-};
-
-export type IThreadQueueItemWithMeta = IThreadQueueItem & {
-	createdAt: number,
-};
-
-export interface IThreadController {
-	[key: string | number | symbol]: (context: ThreadContext) => Promise<any>,
-}
 
 export type ITaskType = 'manual' | 'scheduled' | 'any';
 

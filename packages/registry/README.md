@@ -3,9 +3,9 @@
 <a href="https://github.com/sodacore/core">
 <img src="https://sodacore.dev/logo.png" alt="Logo" width="80" height="80">
 </a>
-<h3 align="center">Sodacore</h3>
+<h3 align="center">Sodacore Registry</h3>
 <p align="center">
-Sodacore is a bun-powered framework for building server-side applications utilising the lighting fast <a href="https://bun.sh" target="_blank">Bun</a> runtime.<br />The <code>@sodacore/registry</code> package provides a global registry for storing and retrieving services and other objects.
+Sodacore is a bun-powered framework for building server-side applications utilising the lighting fast <a href="https://bun.sh" target="_blank">Bun</a> runtime.<br />The <code>@sodacore/registry</code> package provides a global registry for storing and retrieving services and other objects/data.
 <br/>
 <br/>
 <a href="https://sodacore.dev"><strong>Explore the docs »</strong></a>
@@ -31,14 +31,13 @@ Sodacore is a bun-powered framework for building server-side applications utilis
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [CLI Setup](#cli-setup)
+  - [Manual setup](#manual-setup)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
-- [Notice](#notice)
 
 ## About The Project
 
@@ -106,7 +105,7 @@ Don&#39;t forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT license.
+Distributed under the Apache-2.0 license.
 
 ## Contact
 
@@ -119,4 +118,4 @@ If you have any questions or suggestions, feel free to reach out to us:
 
 A special thanks to the following for their contributions, helpful projects, support and inspiration:
 
-- [makeread.me](https://github.com/sodacore/core) - README Template
+- [makeread.me](https://makeread.me/) - README Template Generator.

@@ -27,7 +27,7 @@ export default class HttpContext {
 		protected server: Server,
 	) {
 		this.url = new URL(this.request.url) as any;
-		this.cookies = parseCookies(this.request.headers.get('cookies') ?? '');
+		this.cookies = parseCookies(this.request.headers.get('cookie') ?? '');
 	}
 
 	/**

@@ -24,7 +24,7 @@
 		"email": "sodacoredev@gmail.com"
 	},
 	"engines": {
-		"bun": ">=1.0.30"
+		"bun": ">=1.2.23"
 	},
 	"scripts": {
 		"dev": "SODA_ENV=dev bun run src/index.ts --target=bun",

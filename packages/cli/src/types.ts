@@ -2,7 +2,8 @@ export type IConfigConnectionItem = {
 	host: string,
 	port: number,
 	pass: string,
-	name?: string,
+	name: string,
+	default: boolean,
 };
 
 export type IConfigCli = {

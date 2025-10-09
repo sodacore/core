@@ -198,12 +198,6 @@ export default class Autowire extends BaseModule {
 			const types = Utils.getMeta<string[]>('type', 'autowire')(Module, undefined, ['core']);
 			this.logger.info(`[AUTOWIRE]: Registering ${types.join(', ')}: "${name ?? Module.name}".`);
 
-			// If thread type, do not initialise, only register.
-			if (types.includes('thread')) {
-				Registry.set(`@sodacore:thread:${name ?? Module.name}`, Module);
-				continue;
-			}
-
 			// Initialise the module and add to the registry.
 			const instance = new Module(this.config);
 			Registry.set(name ?? Module.name, instance);

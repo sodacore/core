@@ -1,4 +1,5 @@
 import type { MaybePromise } from '@sodacore/core';
+import type { TLSOptions } from 'bun';
 import type HttpContext from './context/http';
 
 export type IWebSocketEvents = 'open' | 'close' | 'message' | 'drain';
@@ -8,9 +9,26 @@ export type IConfig = {
 	port: number,
 	host?: string,
 	ssePath?: string, // [See docs for manual setup].
-	builtInMiddlewares?: {
-		cors?: boolean,
+	httpOptions?: {
+		maxRequestBodySize?: number, // Default: 128MB.
+		idleTimeout?: number, // Default: 10s.
+		ipv6Only?: boolean, // Default: false.
+		reusePort?: boolean, // Default: false (used for load-balancing).
+		unixSocketPath?: string, // Default: undefined (used for socket-based servers).
+		tls?: TLSOptions,
 	},
+	builtin?: {
+		corsMiddleware?: boolean,
+	},
+};
+
+export type IWsConfig = {
+	idleTimeout?: number, // Default: false.
+	backpressureLimit?: number, // Default (1024 * 1024) 1MB.
+	maxPayloadLength?: number, // Default: (1024 * 1024 * 16) 16MB
+	closeOnBackpressureLimit?: boolean, // Default: false.
+	publishToSelf?: boolean, // Default: false.
+	perMessageDeflate?: boolean, // Default: false.
 };
 
 export type IControllerMetaMethodItem = {

@@ -17,6 +17,8 @@ export default class Commands {
 
 	public constructor(
 		private exitHandler: (value?: string) => void,
+		private answers: string[] = [],
+		private closeAfter = false,
 	) {}
 
 	public setSocket(socket: Socket<ISocketData>) {
@@ -61,6 +63,18 @@ export default class Commands {
 	}
 
 	private async handleCommands(context: { commands: string[] }) {
+
+		if (this.answers.length === 0 && this.closeAfter) {
+			this.exitHandler();
+			return true;
+		}
+
+		if (this.answers.length > 0) {
+			const answer = this.answers.shift()!;
+			this.write(String(answer));
+			return true;
+		}
+
 		if (context.commands.length === 0) {
 			log.info('No commands available.');
 			return false;

@@ -31,14 +31,13 @@ Sodacore is a bun-powered framework for building server-side applications utilis
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [CLI Setup](#cli-setup)
+  - [Manual setup](#manual-setup)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
-- [Notice](#notice)
 
 ## About The Project
 
@@ -106,7 +105,7 @@ Don&#39;t forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT license.
+Distributed under the Apache-2.0 license.
 
 ## Contact
 
@@ -119,4 +118,4 @@ If you have any questions or suggestions, feel free to reach out to us:
 
 A special thanks to the following for their contributions, helpful projects, support and inspiration:
 
-- [makeread.me](https://github.com/sodacore/core) - README Template
+- [makeread.me](https://makeread.me/) - README Template Generator.

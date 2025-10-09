@@ -1,4 +1,4 @@
-import type { IConfig, IControllerMetaMethodItem, IControllerMethodArgItem, IGlobalMiddleware, IMiddleware, IRoutes, IServerContext, IWebSocketEventListener, IWebSocketEvents } from '../types';
+import type { IConfig, IControllerMetaMethodItem, IControllerMethodArgItem, IGlobalMiddleware, IMiddleware, IRoutes, IServerContext, IWebSocketEventListener, IWebSocketEvents, IWsConfig } from '../types';
 import { BaseService, Utils as CoreUtils, Events, Service } from '@sodacore/core';
 import { Inject, Utils } from '@sodacore/di';
 import { Registry } from '@sodacore/registry';
@@ -19,6 +19,7 @@ import SseConnectionsProvider from '../provider/sse-connections';
 @Service()
 export default class HttpService extends BaseService {
 	@Inject('@http:config') private config!: IConfig;
+	@Inject('@ws:config') private wsConfig!: IWsConfig;
 	@Inject() private events!: Events;
 	@Inject() private connections!: SseConnectionsProvider;
 	private wsListeners = new Map<IWebSocketEvents, Set<IWebSocketEventListener>>();
@@ -151,6 +152,12 @@ export default class HttpService extends BaseService {
 		this.serverConfig = {
 			hostname: this.config.host ?? undefined,
 			port: this.config.port ?? 8080,
+			maxRequestBodySize: this.config.httpOptions?.maxRequestBodySize,
+			idleTimeout: this.config.httpOptions?.idleTimeout,
+			ipv6Only: this.config.httpOptions?.ipv6Only,
+			reusePort: this.config.httpOptions?.reusePort,
+			tls: this.config.httpOptions?.tls,
+			unix: this.config.httpOptions?.unixSocketPath,
 			fetch: async (request, server) => {
 
 				// Define basic information.
@@ -168,6 +175,12 @@ export default class HttpService extends BaseService {
 				return response;
 			},
 			websocket: {
+				perMessageDeflate: this.wsConfig.perMessageDeflate,
+				idleTimeout: this.wsConfig.idleTimeout,
+				backpressureLimit: this.wsConfig.backpressureLimit,
+				maxPayloadLength: this.wsConfig.maxPayloadLength,
+				closeOnBackpressureLimit: this.wsConfig.closeOnBackpressureLimit,
+				publishToSelf: this.wsConfig.publishToSelf,
 				open: socket => {
 					const listeners = this.wsListeners.get('open');
 					if (listeners) listeners.forEach(listener => listener(socket));
@@ -186,18 +199,6 @@ export default class HttpService extends BaseService {
 				},
 			},
 		};
-	}
-
-	/**
-	 * Will set a config value for the HTTP service by default
-	 * or to the WebSocket config if specified.
-	 * @param key The config key.
-	 * @param value The value to set.
-	 * @param forWs For WebSocket, defaults to the root config.
-	 */
-	public setConfig(key: string, value: any, forWs = false) {
-		if (forWs) (<any> this.serverConfig).websocket[key] = value;
-		else (<any> this.serverConfig)[key] = value;
 	}
 
 	/**
@@ -395,10 +396,10 @@ export default class HttpService extends BaseService {
 		switch (arg.type) {
 			case 'request': return context.getRequest();
 			case 'server': return context.getServer();
-			case 'params': return arg.name ? this.asNumber(params[arg.name]) : params;
-			case 'query': return arg.name ? this.asNumber(context.getUrl().searchParams.get(arg.name)) : context.getUrl().searchParams;
-			case 'headers': return arg.name ? context.getRequest().headers.get(arg.name) : context.getRequest().headers;
-			case 'cookies': return arg.name ? cookies.get(arg.name) : cookies;
+			case 'params': return arg.name ? this.coerceValue(params[arg.name]) : params;
+			case 'query': return this.getProperty(context.getUrl().searchParams, arg.name);
+			case 'headers': return this.getProperty(context.getRequest().headers, arg.name);
+			case 'cookies': return this.getProperty(cookies, arg.name);
 			case 'body': return await context.getBody(params.format);
 			case 'url': return context.getUrl();
 			case 'method': return context.getRequest().method;
@@ -406,13 +407,29 @@ export default class HttpService extends BaseService {
 	}
 
 	/**
-	 * Will convert the value to a number if it is a number.
-	 * @param value The value to convert.
+	 * Will get a property from a collection (map).
+	 * @param collection The collection to get from.
+	 * @param key The key to get [optional].
 	 * @returns any
 	 * @private
 	 */
-	private asNumber(value: any) {
-		const number = Number(value);
-		return Number.isNaN(number) ? value : number;
+	private getProperty(collection: URLSearchParams | Headers | Map<string, any>, key?: string) {
+		if (!key) return collection;
+		const value = collection.get(key);
+		return this.coerceValue(value);
+	}
+
+	/**
+	 * Will coerce a value to the correct type.
+	 * @param value The value to coerce.
+	 * @returns any
+	 * @private
+	 */
+	private coerceValue(value: any) {
+		if (value === null) return undefined;
+		if (value === 'true') return true;
+		if (value === 'false') return false;
+		if (!Number.isNaN(Number(value))) return Number(value);
+		return value;
 	}
 }

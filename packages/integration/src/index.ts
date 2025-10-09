@@ -24,7 +24,9 @@ app.use(new HttpPlugin({
 }));
 
 // Install the WebSocket plugin.
-app.use(new WsPlugin());
+app.use(new WsPlugin({
+	publishToSelf: true,
+}));
 
 // Install the i18n plugin.
 app.use(new I18nPlugin({

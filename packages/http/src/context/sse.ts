@@ -78,7 +78,7 @@ export default class SseContext extends HttpContext {
 					'X-Accel-Buffering': 'no',
 					'Set-Cookie': `sodacoreId=${this.id}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge};`,
 					'Connection': 'keep-alive',
-				}, headers),
+				}, headers, this.responseHeaders),
 			},
 		);
 	}

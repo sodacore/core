@@ -16,10 +16,6 @@ import type {
 	IResponse,
 	ITaskSettings,
 	ITaskType,
-	IThreadController,
-	IThreadMessage,
-	IThreadQueueItem,
-	IThreadQueueItemWithMeta,
 	IWorkerMessage,
 	IWorkerQueueItem,
 	MaybeArray,
@@ -30,22 +26,18 @@ import BasePlugin from './base/plugin';
 
 import BaseService from './base/service';
 import BaseTask from './base/task';
-import BaseThread from './base/thread';
 import BaseWorker from './base/worker';
 import ScriptContext from './context/script';
-import ThreadContext from './context/thread';
 import Autoload from './decorator/autoload';
 import Catch from './decorator/catch';
 import Command from './decorator/command';
 import Configure from './decorator/configure';
-import Controller from './decorator/controller';
 import Expose from './decorator/expose';
 import Hook from './decorator/hook';
 import Namespace from './decorator/namespace';
 import Script from './decorator/script';
 import Service from './decorator/service';
 import Task from './decorator/task';
-import Thread from './decorator/thread';
 import Worker from './decorator/worker';
 import * as Constants from './helper/constants';
 import * as Utils from './helper/utils';
@@ -57,12 +49,9 @@ import Autowire from './module/autowire';
 import Events from './module/events';
 import Runner from './module/runner';
 import Services from './module/services';
-import ThreadWrapper from './module/thread';
-import Threads from './module/threads';
 import WorkerWrapper from './module/worker';
 import Logger from './provider/logger';
 import TasksProvider from './provider/tasks';
-import ThreadsProvider from './provider/threads';
 import WorkersProvider from './provider/workers';
 
 export type {
@@ -83,10 +72,6 @@ export type {
 	IResponse,
 	ITaskSettings,
 	ITaskType,
-	IThreadController,
-	IThreadMessage,
-	IThreadQueueItem,
-	IThreadQueueItemWithMeta,
 	IWorkerMessage,
 	IWorkerQueueItem,
 	MaybeArray,
@@ -101,13 +86,11 @@ export {
 	BasePlugin,
 	BaseService,
 	BaseTask,
-	BaseThread,
 	BaseWorker,
 	Catch,
 	Command,
 	Configure,
 	Constants,
-	Controller,
 	Events,
 	Expose,
 	Hook,
@@ -120,11 +103,6 @@ export {
 	Services,
 	Task,
 	TasksProvider,
-	Thread,
-	ThreadContext,
-	Threads,
-	ThreadsProvider,
-	ThreadWrapper,
 	Utils,
 	Worker,
 	WorkersProvider,

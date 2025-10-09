@@ -38,14 +38,14 @@ export function resolve(base: string, ...paths: string[]) {
 }
 
 /**
- * Will get the filename passed into the worker and thread
- * bootstrap processes, so that the module can be loaded via
- * the worker/thread wrappers.
+ * Will get the filename passed into the worker bootstrap
+ * processes, so that the module can be loaded via
+ * the worker wrappers.
  * @returns string
  */
-export function getThreadFileFromArgs() {
+export function getWorkerFileFromArgs() {
 	const fileArg = process.argv.find(arg => arg.startsWith('--file='));
-	if (!fileArg) throw new Error('Thread file not found in args, when spawning the process.');
+	if (!fileArg) throw new Error('Worker file not found in args, when spawning the process.');
 	return fileArg.split('=')[1];
 }
 

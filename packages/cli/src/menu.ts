@@ -88,8 +88,21 @@ export async function addConnectionMenu() {
 		exit(0);
 	}
 
+	// Is default?
+	const isDefault = await select({
+		message: 'Set this connection as default?',
+		options: [
+			{ value: true, label: 'Yes' },
+			{ value: false, label: 'No' },
+		],
+	});
+	if (isCancel(isDefault)) {
+		cancel('Operation cancelled');
+		exit(0);
+	}
+
 	// Get the config.
-	const status = await addConnection(hostName, Number.parseInt(port), password, name);
+	const status = await addConnection(hostName, Number.parseInt(port), password, name, isDefault);
 	if (!status) {
 		cancel('Failed to add connection');
 		exit(1);

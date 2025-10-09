@@ -56,6 +56,16 @@ if (isCancel(template)) {
 // If the template is a community template, ask for the user and name.
 if (template === 'community') {
 
+	// Confirm the user wants to use a community template.
+	const isCommunityConfirmed = await confirm({
+		message: 'Are you sure you want to use a community template? These templates are not verified by the Sodacore team and may be unsafe, please ensure you check the code before running it on your machine.',
+		initialValue: false,
+	});
+	if (isCancel(isCommunityConfirmed) || !isCommunityConfirmed) {
+		cancel('Operation cancelled');
+		exit(0);
+	}
+
 	// Ask for the repository.
 	const communityUser = await text({
 		message: 'What is the user/repository of the community template (on Github)?',
@@ -65,6 +75,33 @@ if (template === 'community') {
 		cancel('Operation cancelled');
 		exit(0);
 	}
+
+	// Ask for the branch.
+	const communityBranch = await text({
+		message: 'What is the branch of the community template?',
+		placeholder: 'main',
+		defaultValue: 'main',
+	});
+	if (isCancel(communityBranch)) {
+		cancel('Operation cancelled');
+		exit(0);
+	}
+
+	// Create community repo path and load the files list.
+	const communityRepo = `https://raw.githubusercontent.com/${communityUser}/refs/heads/${communityBranch}/template.json`;
+	const response = await fetch(communityRepo);
+	if (!response.ok) {
+		cancel(`Failed to fetch community template: ${response.statusText}`);
+		exit(1);
+	}
+	const templateData = await response.json().catch(() => null) as any;
+	if (!templateData || !templateData.files || templateData.files.length === 0) {
+		cancel('No valid template data found in the community repository.');
+		exit(1);
+	}
+
+	// Set the files to download.
+	files = templateData.files;
 } else {
 	files = templates.find(t => t.id === template)?.files || [];
 }

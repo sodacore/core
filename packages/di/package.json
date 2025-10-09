@@ -42,7 +42,7 @@
 		"build:watch": "rm -rf dist; tsc --watch"
 	},
 	"engines": {
-		"bun": ">=1.0.30"
+		"bun": ">=1.2.23"
 	},
 	"repository": {
 		"type": "git",

@@ -1,6 +1,6 @@
 import type { ServerWebSocket } from 'bun';
 import type { Buffer } from 'node:buffer';
-import type { IConfig, IServerWsContext } from '../types';
+import type { IRoute, IServerWsContext, ITransformFunction } from '../types';
 import { Autoload, BaseService, Utils as CoreUtils, Events, Service } from '@sodacore/core';
 import { Inject, Utils } from '@sodacore/di';
 import { HttpService, type IServerContext } from '@sodacore/http';
@@ -11,12 +11,10 @@ import WsConnections from '../provider/ws-connections';
 @Autoload(25)
 @Service()
 export default class WsService extends BaseService {
-	@Inject('@ws:config') private config!: IConfig;
 	@Inject() private httpService!: HttpService;
 	@Inject() private connections!: WsConnections;
 	@Inject() private events!: Events;
-	private controllers = new Map<string, (context: WsContext) => Promise<any>>();
-	private middlewares: any[] = [];
+	private controllers = new Map<string, IRoute>();
 
 	public async init() {
 
@@ -40,23 +38,20 @@ export default class WsService extends BaseService {
 			// Check for valid type and service it is for.
 			if (types.length === 0 || !services.includes('ws')) continue;
 
-			// If a middleware type.
-			if (types.includes('middleware')) {
-				this.middlewares.push(module);
-			}
-
 			// If a controller type.
 			if (types.includes('controller')) {
 
 				// Define the namespace.
 				const namespace = Utils.getMeta('namespace', 'ws')(module.constructor);
 				const exposedMethods = Utils.getMeta<string[]>('exposed', 'ws')(module.constructor, undefined, []);
+				const controllerTransformers = Utils.getMeta<ITransformFunction[]>('transformers', 'http')(module.constructor, undefined, []);
 
 				// Loop the exposed methods.
 				for (const methodName of exposedMethods) {
 
 					// Define the command.
 					const command = `${namespace}:${methodName}`;
+					const methodTransformers = Utils.getMeta<ITransformFunction[]>('transformers', 'http')(module, methodName, []);
 
 					// Check for a duplicate.
 					if (this.controllers.has(command)) {
@@ -65,17 +60,16 @@ export default class WsService extends BaseService {
 					}
 
 					// Check for a namespace.
-					this.controllers.set(command, module[methodName].bind(module));
+					this.controllers.set(command, {
+						transformers: [...controllerTransformers, ...methodTransformers],
+						method: module[methodName].bind(module),
+					});
 				}
 			}
 		}
 
 		// Notify console.
 		this.logger.info(`[WS]: Registered ${this.controllers.size} controller(s).`);
-
-		// Setup the config items.
-		const configKeys = Object.keys(this.config).filter(key => !['port', 'path'].includes(key));
-		configKeys.forEach(key => this.httpService.setConfig(key, (<any> this.config)[key]));
 	}
 
 	/**
@@ -171,17 +165,22 @@ export default class WsService extends BaseService {
 		}
 
 		// Execute the method.`
-		const method = this.controllers.get(command);
-		if (!method) throw new Error(`Method not found for command: "${command}" - this looks like a bug.`);
+		const route = this.controllers.get(command);
+		if (!route) throw new Error(`Route not found for command: "${command}" - this looks like a bug.`);
 
 		// Add the data to the connection.
 		connection.setData(context);
 
 		// Execute the method.
-		const result = await method(connection);
+		let result = await route.method(connection);
 
 		// If no result, do nothing.
 		if (typeof result === 'undefined' || result === null) return;
+
+		// Execute any transformers.
+		for (const transformer of route.transformers) {
+			result = await transformer(connection, result);
+		}
 
 		// If result is of type number or string.
 		if (['number', 'string', 'boolean'].includes(typeof result)) {

@@ -1,10 +1,14 @@
-import { Controller, Get, Params } from '@sodacore/http';
+import { Controller, Cookies, Get, Params, Query } from '@sodacore/http';
 
 @Controller('/hello')
 export default class HelloController {
 
 	@Get('/test1')
-	public async test1() {
+	public async test1(
+		@Cookies('hello') cookies: Map<string, string>,
+		@Query('name') name?: string,
+	) {
+		console.log(cookies, name);
 		return 'test1';
 	}
 

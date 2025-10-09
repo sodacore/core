@@ -48,7 +48,7 @@
 		"directory": "packages/prisma"
 	},
 	"engines": {
-		"bun": ">=1.1.20"
+		"bun": ">=1.2.23"
 	},
 	"scripts": {
 		"build": "tsc",
@@ -62,11 +62,11 @@
 	},
 	"dependencies": {
 		"@mrleebo/prisma-ast": "^0.13.0",
-		"@prisma/client": "^6.16.3",
+		"@prisma/client": "^6.17.0",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"prisma": "^6.16.3",
+		"prisma": "^6.17.0",
 		"reflect-metadata": "^0.2.2"
 	}
 }

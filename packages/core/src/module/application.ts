@@ -3,12 +3,10 @@ import process from 'node:process';
 import { Registry } from '@sodacore/registry';
 import Logger from '../provider/logger';
 import TasksProvider from '../provider/tasks';
-import ThreadsProvider from '../provider/threads';
 import Autowire from './autowire';
 import Events from './events';
 import Runner from './runner';
 import Services from './services';
-import Threads from './threads';
 import Scripts from './scripts';
 import Workers from './workers';
 import DefaultScripts from '../script/default';
@@ -26,7 +24,6 @@ export default class Application {
 	protected autowire: Autowire;
 	protected events: Events;
 	protected runner: Runner;
-	protected threads: Threads;
 	protected workers: Workers;
 	protected services: Services;
 	protected scripts: Scripts;
@@ -63,7 +60,6 @@ export default class Application {
 		this.autowire = new Autowire(this.config, this);
 		this.events = new Events(this.config);
 		this.runner = new Runner(this.config);
-		this.threads = new Threads(this.config);
 		this.scripts = new Scripts(this.config);
 		this.services = new Services(this.config);
 		this.workers = new Workers(this.config);
@@ -74,7 +70,6 @@ export default class Application {
 		Registry.set('Runner', this.runner);
 		Registry.set('Scripts', this.scripts);
 		Registry.set('Services', this.services);
-		Registry.set('Threads', this.threads);
 		Registry.set('Workers', this.workers);
 
 		// Create exit handler.
@@ -99,13 +94,11 @@ export default class Application {
 		// Start our core modules.
 		await this.autowire.start();
 		await this.runner.start();
-		await this.threads.start();
 		await this.workers.start();
 		await this.services.start();
 		await this.scripts.start();
 
 		// Initialise the built in providers.
-		Registry.set('ThreadsProvider', new ThreadsProvider());
 		Registry.set('TasksProvider', new TasksProvider());
 		Registry.set('WorkersProvider', new WorkersProvider());
 
@@ -132,7 +125,6 @@ export default class Application {
 
 		// Stop all of our core modules.
 		await this.services.stop();
-		await this.threads.stop();
 		await this.workers.stop();
 		await this.runner.stop();
 		await this.autowire.stop();
@@ -196,7 +188,6 @@ export default class Application {
 
 		// Initialise our main modules.
 		await this.runner.init();
-		await this.threads.init();
 		await this.workers.init();
 		await this.services.init();
 		await this.scripts.init();

@@ -48,7 +48,7 @@
 		"directory": "packages/i18n"
 	},
 	"engines": {
-		"bun": ">=1.1.20"
+		"bun": ">=1.2.23"
 	},
 	"scripts": {
 		"build": "tsc",

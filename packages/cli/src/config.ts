@@ -50,12 +50,27 @@ export async function setConfig(config: IConfigCli) {
 	}
 }
 
-export async function addConnection(host: string, port: number, pass: string, name: string) {
+export async function addConnection(host: string, port: number, pass: string, name: string, isDefault = false) {
 	try {
+
+		// Get the config.
 		const config = await getConfig();
+
+		// Default the connections array.
 		if (!config.connections) config.connections = [];
-		config.connections.push({ host, port, pass, name });
+
+		// If setting this connection as default, remove the default flag from all others.
+		if (isDefault) {
+			for (const conn of config.connections) {
+				conn.default = false;
+			}
+		}
+
+		// Add the connection.
+		config.connections.push({ host, port, pass, name, default: isDefault });
 		await setConfig(config);
+
+		// Return successful.
 		return true;
 	} catch (err) {
 		log.error(err instanceof Error ? err.message : 'Unknown error');
@@ -63,11 +78,11 @@ export async function addConnection(host: string, port: number, pass: string, na
 	}
 }
 
-export async function editConnection(index: number, host: string, port: number, pass: string) {
+export async function editConnection(index: number, host: string, port: number, pass: string, name: string, isDefault = false) {
 	try {
 		const config = await getConfig();
 		if (!config.connections) config.connections = [];
-		config.connections[index] = { host, port, pass };
+		config.connections[index] = { host, port, pass, name, default: isDefault };
 		await setConfig(config);
 		return true;
 	} catch (err) {
@@ -93,4 +108,18 @@ export async function getConnection(index: number) {
 	const config = await getConfig();
 	if (!config.connections) config.connections = [];
 	return config.connections[index];
+}
+
+export async function getConnectionByNameOrDefault(name: string | null) {
+	const config = await getConfig();
+	if (!config.connections) return null;
+	if (name) {
+		const connection = config.connections.find(conn => conn.name === name);
+		if (connection) return connection;
+		return null;
+	} else {
+		const defaultConnection = config.connections.find(conn => conn.default);
+		if (defaultConnection) return defaultConnection;
+		return null;
+	}
 }

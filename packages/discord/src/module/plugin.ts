@@ -3,7 +3,6 @@ import { type Application, BasePlugin, type IPlugin, Utils } from '@sodacore/cor
 import { file } from 'bun';
 import DiscordService from '../service/discord';
 import SlashCommandsProvider from '../provider/slash-commands';
-import PromptsHelper from '../provider/prompts';
 import OAuthProvider from '../provider/oauth';
 import DiscordScripts from '../script/general';
 
@@ -24,7 +23,6 @@ export default class DiscordPlugin extends BasePlugin implements IPlugin {
 
 	public async install(app: Application) {
 		app.register(DiscordScripts);
-		app.register(PromptsHelper);
 		app.register(DiscordService);
 		app.register(OAuthProvider);
 		app.register(SlashCommandsProvider);

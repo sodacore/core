@@ -1,7 +1,7 @@
 import type { IConfig, IDiscordOptionsCommand, IDiscordOptionsGroup, IDiscordOptionsSubCommand, IRouterControllerMethodItem } from '../types';
 import { Inject, Provide, Utils } from '@sodacore/di';
 import { Registry } from '@sodacore/registry';
-import { Client, ContextMenuCommandBuilder, REST, Routes, SharedSlashCommand } from 'discord.js';
+import { Client, ContextMenuCommandBuilder, REST, Routes, SlashCommandBuilder } from 'discord.js';
 import { toBuilder } from '../helper/slash-commands';
 
 @Provide()
@@ -147,7 +147,7 @@ export default class SlashCommandsProvider {
 
 		// Now let's get all the slash commands.
 		const commands = controllers.map(controller => {
-			const builder: SharedSlashCommand = Utils.getMeta('builder', 'discord')(controller.constructor);
+			const builder: SlashCommandBuilder = Utils.getMeta('builder', 'discord')(controller.constructor);
 			if (builder) {
 				return builder.toJSON();
 			} else {

@@ -24,7 +24,7 @@ import type {
 	ITokenResult,
 } from './types';
 
-import { GatewayIntentBits, SlashCommandBuilder } from 'discord.js';
+import { IntentsBitField, SlashCommandBuilder } from 'discord.js';
 import * as Add from './decorator/add';
 import * as Auth from './decorator/auth';
 import { Command, ContextMenu, Event, Handler } from './decorator/command';
@@ -34,7 +34,6 @@ import * as On from './decorator/on';
 import DiscordPlugin from './module/plugin';
 import DiscordService from './service/discord';
 import SlashCommandsProvider from './provider/slash-commands';
-import PromptsHelper from './provider/prompts';
 import DiscordScripts from './script/general';
 import OAuthProvider from './provider/oauth';
 
@@ -54,17 +53,16 @@ export {
 	DiscordService,
 	Event,
 	Field,
-	GatewayIntentBits,
 	Guild,
 	Handler,
 	IntegerOption,
+	IntentsBitField,
 	Interaction,
 	MentionableOption,
 	NumberOption,
 	OAuthProvider,
 	On,
 	Option,
-	PromptsHelper,
 	Query,
 	RoleOption,
 	SlashCommand,

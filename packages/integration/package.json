@@ -46,7 +46,7 @@
 		"@sodacore/prisma": "workspace:*",
 		"@sodacore/registry": "workspace:*",
 		"@sodacore/ws": "workspace:*",
-		"discord.js": "^15.0.0-dev.1757851336-b66f52f9a",
+		"discord.js": "^14.23.2",
 		"prisma": "^6.16.3",
 		"uuid": "^13.0.0"
 	},

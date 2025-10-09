@@ -1,4 +1,4 @@
-import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, ClientEventTypes, ClientOptions, ContextMenuCommandInteraction, GuildMember, InteractionContextType, ModalSubmitInteraction, Permissions, RestOrArray, SelectMenuInteraction, User } from 'discord.js';
+import { APIEmbedField, ButtonInteraction, ChatInputCommandInteraction, ClientEvents, ClientOptions, ContextMenuCommandInteraction, GuildMember, InteractionContextType, ModalSubmitInteraction, Permissions, RestOrArray, SelectMenuInteraction, User } from 'discord.js';
 
 export type IAuthFunctionUser = (user: User) => boolean | Promise<boolean>;
 export type IAuthFunctionGuildMember = (user: GuildMember) => boolean | Promise<boolean>;
@@ -12,7 +12,7 @@ export type IConfig = {
 	scopes?: string[],
 	guildId?: string,
 	clientOptions?: ClientOptions,
-	events?: Array<keyof ClientEventTypes>,
+	events?: Array<keyof ClientEvents>,
 	commandRegisterLocation?: 'guild' | 'global',
 };
 
@@ -59,7 +59,7 @@ export type IPromptChoiceItem = {
 	value: string,
 };
 
-export type IAllowedInteractionType = ChatInputCommandInteraction | ButtonInteraction | SelectMenuInteraction | ContextMenuCommandInteraction | ModalSubmitInteraction;
+export type IAllowedInteractionType = ChatInputCommandInteraction<any> | ButtonInteraction | SelectMenuInteraction | ContextMenuCommandInteraction | ModalSubmitInteraction;
 
 export type IPromptsQuestionOptions = {
 	timeout?: number,

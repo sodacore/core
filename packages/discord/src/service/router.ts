@@ -1,5 +1,5 @@
 import type { IAuthFunctionItem, IControllerMethodArgItem, IDiscordOptionsCommand, IRouterControllerItem, IRouterControllerMethodItem } from '../types';
-import { AutocompleteInteraction, ButtonInteraction, ChatInputCommandInteraction, Client, ClientEventTypes, ContextMenuCommandInteraction, GuildMember, Interaction, ModalSubmitInteraction, SharedSlashCommand, StringSelectMenuInteraction, User } from 'discord.js';
+import { AutocompleteInteraction, ButtonInteraction, ChatInputCommandInteraction, Client, ClientEvents, ComponentType, ContextMenuCommandInteraction, GuildMember, Interaction, ModalSubmitInteraction, SharedSlashCommand, StringSelectMenuInteraction, User } from 'discord.js';
 import { Registry } from '@sodacore/registry';
 import { Utils } from '@sodacore/di';
 import { Logger } from '@sodacore/core';
@@ -195,7 +195,7 @@ export default class Router {
 		// Define the params.
 		const commandName = interaction.commandName;
 		const subCommand = interaction.options.getSubcommand(false);
-		const { value, name } = interaction.options.getFocused();
+		const { value, name } = interaction.options.getFocused(true);
 
 		// Let's get the controller.
 		const controller = this.getController(commandName);
@@ -256,7 +256,7 @@ export default class Router {
 		}
 	}
 
-	public async onEvent(event: keyof ClientEventTypes, ...data: unknown[]) {
+	public async onEvent(event: keyof ClientEvents, ...data: unknown[]) {
 		try {
 			for (const controller of this.controllers) {
 				for (const method of controller.methods) {
@@ -325,12 +325,23 @@ export default class Router {
 			}
 			if (arg.type === 'field' && arg.name) {
 				if (interaction.isModalSubmit()) {
-					const value = interaction.fields.getTextInputValue(arg.name);
-					params.push(value);
-					continue;
-				} else {
-					params.push(null);
-					continue;
+					const dataType = interaction.fields.getField(arg.name);
+					if (dataType.type === ComponentType.RoleSelect) {
+						params.push(interaction.fields.getSelectedRoles(arg.name));
+					} else if (dataType.type === ComponentType.UserSelect) {
+						params.push(interaction.fields.getSelectedUsers(arg.name));
+					} else if (dataType.type === ComponentType.ChannelSelect) {
+						params.push(interaction.fields.getSelectedChannels(arg.name));
+					} else if (dataType.type === ComponentType.StringSelect) {
+						params.push(interaction.fields.getStringSelectValues(arg.name));
+					} else if (dataType.type === ComponentType.TextInput) {
+						params.push(interaction.fields.getTextInputValue(arg.name));
+					} else if (dataType.type === ComponentType.MentionableSelect) {
+						params.push(interaction.fields.getSelectedMentionables(arg.name));
+					} else {
+						params.push(null);
+						continue;
+					}
 				}
 			}
 		}

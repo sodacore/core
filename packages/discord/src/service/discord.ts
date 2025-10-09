@@ -1,7 +1,7 @@
 import type { IConfig } from '../types';
 import { BaseService, Service } from '@sodacore/core';
 import { Inject } from '@sodacore/di';
-import { CacheType, Client, ClientEventTypes, ClientOptions, Interaction } from 'discord.js';
+import { CacheType, Client, ClientEvents, ClientOptions, Interaction } from 'discord.js';
 import Router from './router';
 import { Registry } from '@sodacore/registry';
 
@@ -28,7 +28,7 @@ export default class DiscordService extends BaseService {
 
 		// Let's setup the discord client.
 		this.client = new Client(Object.assign(this.discordConfig, this.config.clientOptions));
-		this.client.on('ready', () => {
+		this.client.on('clientReady', () => {
 			this.logger.info('[DISCORD]: Successfully connected and ready.');
 		});
 
@@ -102,7 +102,7 @@ export default class DiscordService extends BaseService {
 		}
 	}
 
-	private handleEvent(event: keyof ClientEventTypes, ...args: unknown[]) {
+	private handleEvent(event: keyof ClientEvents, ...args: unknown[]) {
 		return this.router.onEvent(event, ...args);
 	}
 }

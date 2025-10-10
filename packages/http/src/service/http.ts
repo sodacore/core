@@ -19,7 +19,6 @@ import SseConnectionsProvider from '../provider/sse-connections';
 @Service()
 export default class HttpService extends BaseService {
 	@Inject('@http:config') private config!: IConfig;
-	@Inject('@ws:config') private wsConfig!: IWsConfig;
 	@Inject() private events!: Events;
 	@Inject() private connections!: SseConnectionsProvider;
 	private wsListeners = new Map<IWebSocketEvents, Set<IWebSocketEventListener>>();
@@ -149,6 +148,10 @@ export default class HttpService extends BaseService {
 	 * @private
 	 */
 	private setupServerConfig() {
+		const wsConfig = Registry.has('@ws:config')
+			? Registry.get<IWsConfig>('@ws:config')
+			: {};
+
 		this.serverConfig = {
 			hostname: this.config.host ?? undefined,
 			port: this.config.port ?? 8080,
@@ -175,12 +178,12 @@ export default class HttpService extends BaseService {
 				return response;
 			},
 			websocket: {
-				perMessageDeflate: this.wsConfig.perMessageDeflate,
-				idleTimeout: this.wsConfig.idleTimeout,
-				backpressureLimit: this.wsConfig.backpressureLimit,
-				maxPayloadLength: this.wsConfig.maxPayloadLength,
-				closeOnBackpressureLimit: this.wsConfig.closeOnBackpressureLimit,
-				publishToSelf: this.wsConfig.publishToSelf,
+				perMessageDeflate: wsConfig.perMessageDeflate,
+				idleTimeout: wsConfig.idleTimeout,
+				backpressureLimit: wsConfig.backpressureLimit,
+				maxPayloadLength: wsConfig.maxPayloadLength,
+				closeOnBackpressureLimit: wsConfig.closeOnBackpressureLimit,
+				publishToSelf: wsConfig.publishToSelf,
 				open: socket => {
 					const listeners = this.wsListeners.get('open');
 					if (listeners) listeners.forEach(listener => listener(socket));

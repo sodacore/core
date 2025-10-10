@@ -118,6 +118,10 @@ export default class implements ICommand {
 			await writeFile(resolve(basePath, `./packages/${name}/package.json`), JSON.stringify(packageJson, null, '\t') + '\n');
 		}
 
+		// Set directory back to root.
+		process.chdir(basePath);
+		await $`git add .; git commit -m "chore: release v${rootPackageJson.version}"; git push; git tag v${rootPackageJson.version}; git push origin main --tags`;
+
 		return true;
 	}
 }

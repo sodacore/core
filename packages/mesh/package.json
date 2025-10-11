@@ -1,0 +1,67 @@
+{
+	"name": "@sodacore/mesh",
+	"description": "Sodacore Mesh plugin, built on-top of SXP, facilitates the ability for Sodacore applications to interlink and communicate via sharing work and more.",
+	"version": "0.4.1",
+	"license": "Apache-2.0",
+	"homepage": "https://sodacore.dev",
+	"module": "false",
+	"type": "module",
+	"main": "dist/index.js",
+	"private": true,
+	"publishConfig": {
+		"access": "restricted"
+	},
+	"keywords": [
+		"bun",
+		"@bun",
+		"sodacore",
+		"sodacore-plugin",
+		"soda",
+		"framework",
+		"decorator",
+		"typescript",
+		"engine",
+		"sxp",
+		"mesh",
+		"protocol",
+		"tcp",
+		"communication"
+	],
+	"files": [
+		"dist"
+	],
+	"author": {
+		"name": "Sodacore Team",
+		"email": "sodacoredev@gmail.com",
+		"url": "https://sodacore.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/sodacore/core/issues",
+		"email": "sodacoredev@gmail.com"
+	},
+	"engines": {
+		"bun": ">=1.2.23"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sodacore/core.git",
+		"directory": "packages/mesh"
+	},
+	"scripts": {
+		"build": "tsc",
+		"build:watch": "tsc --watch"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@sodacore/core": "workspace:*",
+		"@sodacore/di": "workspace:*",
+		"@sodacore/registry": "workspace:*",
+		"reflect-metadata": "^0.2.2",
+		"uuid": "^13.0.0"
+	}
+}

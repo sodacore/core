@@ -44,7 +44,7 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sodacore/core.git",
-		"directory": "packages/cli"
+		"directory": "packages/create"
 	},
 	"engines": {
 		"bun": ">=1.2.23"

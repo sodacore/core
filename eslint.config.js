@@ -81,7 +81,7 @@ export default config({
 // ------------ STYLISTIC RULES ------------
 {
 	files: [
-		'packages/**/*',
+		'packages/**/*.ts',
 	],
 	rules: {
 		'import/no-self-import': 0,

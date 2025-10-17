@@ -1,5 +1,5 @@
+import type { IServerContext, ISsePacket } from '../types';
 import type { Server } from 'bun';
-import type { ISsePacket } from '../types';
 import { Inject } from '@sodacore/di';
 import { v4 } from 'uuid';
 import SseConnectionsProvider from '../provider/sse-connections';
@@ -20,7 +20,7 @@ export default class SseContext extends HttpContext {
 	 */
 	public constructor(
 		request: Request,
-		server: Server,
+		server: Server<IServerContext>,
 	) {
 		// Prepare the extending class.
 		super(request, server);

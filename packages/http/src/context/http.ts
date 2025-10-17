@@ -1,3 +1,4 @@
+import type { IServerContext } from '../types';
 import type { Server } from 'bun';
 import { parseCookies } from '../helper/utils';
 
@@ -24,7 +25,7 @@ export default class HttpContext {
 	 */
 	public constructor(
 		protected request: Request,
-		protected server: Server,
+		protected server: Server<IServerContext>,
 	) {
 		this.url = new URL(this.request.url) as any;
 		this.cookies = parseCookies(this.request.headers.get('cookie') ?? '');
@@ -173,8 +174,15 @@ export default class HttpContext {
 	 * @returns T
 	 * @generic T
 	 */
-	public getBody<T = any>(format: 'json' | 'raw' = 'json') {
-		return format === 'json' ? this.request.json() as T : this.request.text() as T;
+	public async getBody<T = any>(format: 'json' | 'raw' = 'json') {
+		const body = await this.request.text();
+		if (body.length > 0) {
+			if (format === 'json') {
+				return JSON.parse(body) as T;
+			}
+			return body as T;
+		}
+		return null;
 	}
 
 	/**

@@ -2,10 +2,11 @@ import type { IConfig, IControllerMetaMethodItem, IControllerMethodArgItem, IGlo
 import { BaseService, Utils as CoreUtils, Events, Service } from '@sodacore/core';
 import { Inject, Utils } from '@sodacore/di';
 import { Registry } from '@sodacore/registry';
-import { type Serve, serve, type Server } from 'bun';
+import { serve, type Server } from 'bun';
 import HttpContext from '../context/http';
 import SseContext from '../context/sse';
-import { doesRouteMatch, getRouteParams, toResponse } from '../helper/utils';
+import { toResponse } from '../helper/utils';
+import { doesRouteMatch, getRouteParams } from '../helper/paths';
 import SseConnectionsProvider from '../provider/sse-connections';
 
 /**
@@ -22,8 +23,8 @@ export default class HttpService extends BaseService {
 	@Inject() private events!: Events;
 	@Inject() private connections!: SseConnectionsProvider;
 	private wsListeners = new Map<IWebSocketEvents, Set<IWebSocketEventListener>>();
-	private server!: Server;
-	private serverConfig!: Serve<IServerContext>;
+	private server!: Server<IServerContext>;
+	private serverConfig!: Bun.Serve.Options<IServerContext, any>;
 	private controllers: any[] = [];
 	private middleware: IMiddleware[] = [];
 	private globalMiddleware: IGlobalMiddleware[] = [];
@@ -160,7 +161,7 @@ export default class HttpService extends BaseService {
 			ipv6Only: this.config.httpOptions?.ipv6Only,
 			reusePort: this.config.httpOptions?.reusePort,
 			tls: this.config.httpOptions?.tls,
-			unix: this.config.httpOptions?.unixSocketPath,
+			// unix: this.config.httpOptions?.unixSocketPath,
 			fetch: async (request, server) => {
 
 				// Define basic information.
@@ -214,7 +215,7 @@ export default class HttpService extends BaseService {
 	 * @private
 	 * @async
 	 */
-	private async handleRequest(request: Request, server: Server) {
+	private async handleRequest(request: Request, server: Server<IServerContext>) {
 
 		// Create our http context early.
 		const context = new HttpContext(request, server);
@@ -324,7 +325,7 @@ export default class HttpService extends BaseService {
 			// Create some params, and then loop and apply.
 			const functionArguments = [];
 			for (let i = 0; i < paramCount; i++) {
-				functionArguments.push(await this.getMethodArgument(i, args, context, params));
+				functionArguments.push(await this.getMethodArgument(i, args, context, params ?? {}));
 			}
 
 			// Run the method and collect the result.
@@ -403,7 +404,7 @@ export default class HttpService extends BaseService {
 			case 'query': return this.getProperty(context.getUrl().searchParams, arg.name);
 			case 'headers': return this.getProperty(context.getRequest().headers, arg.name);
 			case 'cookies': return this.getProperty(cookies, arg.name);
-			case 'body': return await context.getBody(params.format);
+			case 'body': return await context.getBody(arg.format as 'json' | 'raw');
 			case 'url': return context.getUrl();
 			case 'method': return context.getRequest().method;
 		}

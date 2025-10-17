@@ -39,6 +39,9 @@ export default class UpgradeMiddleware implements IGlobalMiddleware {
 		// Attempt to upgrade.
 		const status = server.upgrade(request, {
 			data: {
+				request,
+				uniqueId: v4(),
+				channels: [],
 				httpContext: context,
 			},
 			headers: {

@@ -46,6 +46,7 @@ export type IServerContext = {
 	request: Request,
 	uniqueId: string,
 	channels: string[],
+	httpContext?: HttpContext,
 };
 
 export type IRoute = {

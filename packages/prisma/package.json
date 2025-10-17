@@ -62,11 +62,11 @@
 	},
 	"dependencies": {
 		"@mrleebo/prisma-ast": "^0.13.0",
-		"@prisma/client": "^6.17.0",
+		"@prisma/client": "^6.17.1",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"prisma": "^6.17.0",
+		"prisma": "^6.17.1",
 		"reflect-metadata": "^0.2.2"
 	}
 }

@@ -40,7 +40,7 @@ export interface IPlugin {
 	description: string,
 	author: string,
 	dependencies: string[],
-	install?: (app: Application) => Promise<void>,
+	install?: (app: Application) => void,
 	init?: () => Promise<any>,
 	start?: () => Promise<any>,
 	stop?: () => Promise<any>,

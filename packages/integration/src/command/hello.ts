@@ -1,5 +1,5 @@
 import { Command, Interaction, On, SlashCommandBuilder } from '@sodacore/discord';
-import { ActionRowBuilder, CommandInteraction, PrimaryButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
 
 @Command(
 	new SlashCommandBuilder()
@@ -18,12 +18,13 @@ export default class HelloCommand {
 	public async onCommand(@Interaction() interaction: CommandInteraction) {
 		const row1 = new ActionRowBuilder();
 		row1.addComponents(
-			new PrimaryButtonBuilder()
+			new ButtonBuilder()
+				.setStyle(ButtonStyle.Primary)
 				.setCustomId('button1')
 				.setLabel('Button 1'),
 		);
 
-		const row2 = new ActionRowBuilder();
+		const row2 = new ActionRowBuilder<any>();
 		row2.addComponents(
 			new StringSelectMenuBuilder()
 				.setCustomId('select1')

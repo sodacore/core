@@ -1,49 +1,46 @@
-// import { Body, Controller, Cookies, Get, Params, Post, Query } from '@sodacore/http';
+import { Controller, Cookies, Get, Params, Query } from '@sodacore/http';
 
-// @Controller('/hello')
-// export default class HelloController {
+@Controller('/hello')
+export default class HelloController {
 
-// 	@Get('/test1')
-// 	public async test1(
-// 		@Cookies('hello') cookies: Map<string, string>,
-// 		@Query('name') name?: string,
-// 	) {
-// 		console.log(cookies, name);
-// 		return 'test1';
-// 	}
+	@Get('/test1')
+	public async test1(
+		@Cookies('hello') cookies: Map<string, string>,
+		@Query('name') name?: string,
+	) {
+		console.log(cookies, name);
+		return 'test1';
+	}
 
-// 	@Get('/test2/?:id')
-// 	public async test2() {
-// 		return 'test2';
-// 	}
+	@Get('/test2/:id?')
+	public async test2() {
+		return 'test2';
+	}
 
-// 	@Get('/test3/?:id/?:name')
-// 	public async test3() {
-// 		return 'test3';
-// 	}
+	@Get('/test3/:id/:name?')
+	public async test3() {
+		return 'test3';
+	}
 
-// 	@Get('/test4/:id/name/?:name')
-// 	public async test4(
-// 		@Params('id') id: string,
-// 		@Params('name') name?: string,
-// 	) {
-// 		return `test4 ${id} ${name || 'no'}`;
-// 	}
+	@Get('/test4/:id/name/:name?')
+	public async test4(
+		@Params('id') id: string,
+		@Params('name') name?: string,
+	) {
+		return `test4 ${id} ${name || 'no'}`;
+	}
 
-// 	@Get('/test5/*')
-// 	public async test5() {
-// 		return 'test5';
-// 	}
+	@Get('/test5/:name(*)')
+	public async test5(
+		@Params('name') name?: string,
+	) {
+		return `test5 ${name || 'no'}`;
+	}
 
-// 	@Get('/test6')
-// 	@Post('/test6/:id')
-// 	public async test6(
-// 		@Params('id') id?: string,
-// 		@Body('raw') body?: string,
-// 		@Cookies('_ga') cookies?: string,
-// 		@Query('something') something?: string,
-// 	) {
-// 		console.log(id, body, cookies, something);
-// 		return body || 'no body';
-// 	}
-// }
+	@Get('/test6/:name(**)')
+	public async test6(
+		@Params('name') name?: string,
+	) {
+		return `test6 ${name || 'no'}`;
+	}
+}

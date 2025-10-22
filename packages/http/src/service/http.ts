@@ -219,6 +219,7 @@ export default class HttpService extends BaseService {
 
 		// Create our http context early.
 		const context = new HttpContext(request, server);
+		await context.init();
 
 		// Dispatch a http request event.
 		this.events.dispatch('httpRequest', { request, server, context });
@@ -282,7 +283,7 @@ export default class HttpService extends BaseService {
 
 			// Otherwise, handle the SSE request.
 			this.logger.info(`[HTTP]: Upgrading connection to SSE, for path: "${path}".`);
-			return this.handleSseRequest(context);
+			return await this.handleSseRequest(context);
 		}
 
 		// Get the routes for that method.
@@ -355,10 +356,11 @@ export default class HttpService extends BaseService {
 		}
 	}
 
-	private handleSseRequest(context: HttpContext) {
+	private async handleSseRequest(context: HttpContext) {
 
 		// Create an SSE context.
 		const sseContext = new SseContext(context.getRequest(), context.getServer());
+		await sseContext.init();
 
 		// Dispatch an sse request event.
 		this.events.dispatch('sseRequest', {
@@ -407,6 +409,8 @@ export default class HttpService extends BaseService {
 			case 'body': return await context.getBody(arg.format as 'json' | 'raw');
 			case 'url': return context.getUrl();
 			case 'method': return context.getRequest().method;
+			case 'files': return await context.getFiles(arg.name);
+			case 'context': return context;
 		}
 	}
 

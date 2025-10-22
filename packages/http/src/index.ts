@@ -16,7 +16,7 @@ import type {
 } from './types';
 import HttpContext from './context/http';
 import SseContext from './context/sse';
-import { Body, Cookies, Headers, Method, Params, Query, Request, Server, Url } from './decorator/context';
+import { Body, Context, Cookies, Files, Headers, Method, Params, Query, Request, Server, Url } from './decorator/context';
 import Controller from './decorator/controller';
 import { Delete, Get, Head, Options, Patch, Post, Put } from './decorator/methods';
 import { GlobalMiddleware, Middleware, Use } from './decorator/middleware';
@@ -31,9 +31,11 @@ export default HttpPlugin;
 
 export {
 	Body,
+	Context,
 	Controller,
 	Cookies,
 	Delete,
+	Files,
 	Get,
 	GlobalMiddleware,
 	Head,

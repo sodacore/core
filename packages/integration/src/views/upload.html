@@ -1,0 +1,16 @@
+<!-- Create a simple upload form, that accepts 2 files -->
+<html>
+<head>
+	<title>File Upload</title>
+</head>
+
+<body>
+	<h1>File Upload</h1>
+	<form action="/upload/accept" method="post" enctype="multipart/form-data">
+		<input type="file" name="file1" />
+		<input type="file" name="file2" />
+		<input type="text" name="description" placeholder="File description" />
+		<button type="submit">Upload</button>
+	</form>
+</body>
+</html>

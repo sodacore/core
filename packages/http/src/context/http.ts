@@ -15,6 +15,8 @@ export default class HttpContext {
 	protected url: URL;
 	protected cookies: Map<string, string>;
 	protected responseHeaders = new Headers();
+	protected hasFormData = false;
+	protected formData?: FormData;
 
 	/**
 	 * Initialise the request, defined by the http service
@@ -29,6 +31,34 @@ export default class HttpContext {
 	) {
 		this.url = new URL(this.request.url) as any;
 		this.cookies = parseCookies(this.request.headers.get('cookie') ?? '');
+	}
+
+	/**
+	 * Called to initialise the context, mostly for
+	 * handling form data.
+	 */
+	public async init() {
+		const contentType = this.request.headers.get('content-type') || '';
+		if (contentType.includes('multipart/form-data')) {
+			this.formData = await this.request.formData() as FormData;
+			this.hasFormData = true;
+		}
+	}
+
+	/**
+	 * Will return if the request has form data.
+	 * @returns boolean
+	 */
+	public isFormData() {
+		return this.hasFormData;
+	}
+
+	/**
+	 * Will return the form data object.
+	 * @returns FormData | undefined
+	 */
+	public getFormData() {
+		return this.formData;
 	}
 
 	/**
@@ -136,6 +166,34 @@ export default class HttpContext {
 	}
 
 	/**
+	 * Will return the files from a multipart/form-data request.
+	 * If a name is provided, will return the specific file,
+	 * otherwise will return all files.
+	 * @param name Name of the file to retrieve. [optional]
+	 * @returns File | File[]
+	 */
+	public async getFiles(name?: string) {
+		if (!['POST', 'PUT', 'PATCH'].includes(this.request.method)) return null;
+		if (!this.hasFormData) return null;
+
+		// Get the form data and then just return the specific file if a name is provieded.
+		if (name) {
+			const file = this.formData!.get(name);
+			if (!(file instanceof File)) return null;
+			return file;
+		}
+
+		// Otherwise, let's return all files as an object.
+		const files: Record<string, File> = {};
+		for (const [key, value] of this.formData!.entries() as any) {
+			if (value instanceof File) {
+				files[key] = value;
+			}
+		}
+		return files;
+	}
+
+	/**
 	 * Will return a cookie from the request, based on the given
 	 * name argument.
 	 * @param name Name of the cookie to retrieve.
@@ -175,14 +233,26 @@ export default class HttpContext {
 	 * @generic T
 	 */
 	public async getBody<T = any>(format: 'json' | 'raw' = 'json') {
-		const body = await this.request.text();
-		if (body.length > 0) {
+		if (this.hasFormData) {
 			if (format === 'json') {
-				return JSON.parse(body) as T;
+				const data: Record<string, any> = {};
+				for (const [key, value] of this.formData!.entries() as any) {
+					data[key] = value;
+				}
+				return data as T;
+			} else {
+				return this.formData as unknown as T;
 			}
-			return body as T;
+		} else {
+			const body = await this.request.text();
+			if (body.length > 0) {
+				if (format === 'json') {
+					return JSON.parse(body) as T;
+				}
+				return body as T;
+			}
+			return null;
 		}
-		return null;
 	}
 
 	/**

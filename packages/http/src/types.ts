@@ -60,7 +60,7 @@ export type IMethodRoutes = Record<string, IRoute>;
 export type IRoutes = Record<string, IMethodRoutes>;
 
 export type IControllerMethodArgItem = {
-	type: 'request' | 'server' | 'params' | 'query' | 'headers' | 'cookies' | 'body' | 'url' | 'method',
+	type: 'request' | 'server' | 'params' | 'query' | 'headers' | 'cookies' | 'body' | 'url' | 'method' | 'files' | 'context',
 	index: number,
 	name?: string,
 	format?: string,

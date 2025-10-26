@@ -19,6 +19,10 @@ export type IConfig = {
 	},
 	builtin?: {
 		corsMiddleware?: boolean,
+		rateLimitMiddleware?: boolean | {
+			paths?: string[],
+			limit?: number, // Default: 5 requests per second.
+		},
 	},
 };
 
@@ -73,8 +77,7 @@ export interface ITranslationService {
 
 export type ITransformFunction = (context: HttpContext, response: any) => MaybePromise<any>;
 
-export interface IGlobalMiddleware<ConfigType = Record<string, any>, ContextType = HttpContext> {
-	config?: ConfigType,
+export interface IGlobalMiddleware<ContextType = HttpContext> {
 	supports?: (context: ContextType) => Promise<Response | boolean | void>,
 	handle: (context: ContextType) => Promise<Response | boolean | void>,
 };

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
 import {
+	buildRegexFromTokens,
 	clearRouteCache,
 	compileRoute,
 	compileRouteCached,
@@ -16,6 +17,7 @@ import {
 	splitSegments,
 	tokenizeSegment,
 	validateNoEmptyInMiddle,
+	validateTokens,
 } from './paths';
 
 /* ========================= Helpers ========================= */
@@ -314,6 +316,42 @@ describe('edge cases', () => {
 		// Should match exactly the literal segment
 		expect(r.regex.test('/file(+).txt')).toBe(true);
 		expect(r.regex.test('/filex).txt')).toBe(false);
+	});
+});
+
+describe('uncovered error branches', () => {
+	it('throws if param pattern ** is not last segment (line 231, 333)', () => {
+		expect(() => compileRoute('/a/:p(**)/b')).toThrow();
+	});
+
+	it('throws if param name is invalid (line 278)', () => {
+		expect(() => compileRoute('/:bad-name')).toThrow();
+		// Directly test validateTokens for a param with invalid name
+		expect(() => validateTokens([
+			{ kind: 'param', name: 'bad-name', raw: ':bad-name', optional: false },
+		] as any)).toThrow();
+	});
+
+	it('throws if param glob pattern with ** is not last segment (line 340)', () => {
+		expect(() => compileRoute('/a/:p(**.png)/b')).toThrow();
+	});
+
+	it('throws in buildRegexFromTokens for double-star param not last (line 333)', () => {
+		const tokens = [
+			{ kind: 'static', raw: '', value: '' },
+			{ kind: 'param', raw: ':p(**)', name: 'p', optional: false, pattern: { type: 'double-star', source: '**' } },
+			{ kind: 'static', raw: 'b', value: 'b' },
+		];
+		expect(() => (buildRegexFromTokens as any)(tokens)).toThrow();
+	});
+
+	it('throws in buildRegexFromTokens for param glob with ** not last (line 340)', () => {
+		const tokens = [
+			{ kind: 'static', raw: '', value: '' },
+			{ kind: 'param', raw: ':p(**.png)', name: 'p', optional: false, pattern: { type: 'glob', source: '**.png' } },
+			{ kind: 'static', raw: 'b', value: 'b' },
+		];
+		expect(() => (buildRegexFromTokens as any)(tokens)).toThrow();
 	});
 });
 

@@ -31,7 +31,6 @@ import ScriptContext from './context/script';
 import Autoload from './decorator/autoload';
 import Catch from './decorator/catch';
 import Command from './decorator/command';
-import Configure from './decorator/configure';
 import Expose from './decorator/expose';
 import Hook from './decorator/hook';
 import Namespace from './decorator/namespace';
@@ -89,7 +88,6 @@ export {
 	BaseWorker,
 	Catch,
 	Command,
-	Configure,
 	Constants,
 	Events,
 	Expose,

@@ -294,4 +294,22 @@ export default class HttpContext {
 		const number = Number(value);
 		return Number.isNaN(number) ? value : number;
 	}
+
+	/**
+	 * Will return the remote address of the request.
+	 * @returns string
+	 */
+	public getRemoteAddress() {
+		const remoteAddress = this.server.requestIP(this.request);
+		return remoteAddress?.address || '';
+	}
+
+	/**
+	 * Will return the remote address information of the request.
+	 * @returns Record<string, any>
+	 */
+	public getRemoteAddressInformation() {
+		const remoteAddress = this.server.requestIP(this.request);
+		return remoteAddress || null;
+	}
 }

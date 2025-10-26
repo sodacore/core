@@ -4,7 +4,7 @@ import { file } from 'bun';
 import SseConnectionsProvider from '../provider/sse-connections';
 import HttpService from '../service/http';
 import CorsMiddleware from '../middlewares/cors';
-// import FilesMiddleware from '../middlewares/files';
+import RateLimitMiddleware from '../middlewares/rate-limit';
 
 const packageJson = file(Utils.resolve(import.meta.dirname, '../../package.json'));
 if (!await packageJson.exists()) throw new Error('Package.json not found.');
@@ -25,8 +25,13 @@ export default class HttpPlugin extends BasePlugin implements IPlugin {
 	public async install(app: Application) {
 		app.register(SseConnectionsProvider);
 		app.register(HttpService);
+
 		if (this.config.builtin?.corsMiddleware) {
 			app.register(CorsMiddleware);
+		}
+
+		if (this.config.builtin?.rateLimitMiddleware) {
+			app.register(RateLimitMiddleware);
 		}
 	}
 }

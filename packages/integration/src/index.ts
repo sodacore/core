@@ -21,6 +21,9 @@ app.use(new PrismaPlugin());
 // Install the HTTP plugin.
 app.use(new HttpPlugin({
 	port: 3101,
+	builtin: {
+		rateLimitMiddleware: true,
+	},
 }));
 
 // Install the WebSocket plugin.

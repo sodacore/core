@@ -4,8 +4,8 @@ import DiscordPlugin from '@sodacore/discord';
 import WsPlugin from '@sodacore/ws';
 import I18nPlugin from '@sodacore/i18n';
 import PrismaPlugin from '@sodacore/prisma';
-import { env } from 'bun';
 import { GatewayIntentBits } from 'discord.js';
+import { env } from 'bun';
 
 // Initialise application.
 const app = new Application({
@@ -16,7 +16,9 @@ const app = new Application({
 });
 
 // Install the Prisma plugin.
-app.use(new PrismaPlugin());
+app.use(new PrismaPlugin({
+	schemaFileLocation: './prisma/schema/schema.prisma',
+}));
 
 // Install the HTTP plugin.
 app.use(new HttpPlugin({

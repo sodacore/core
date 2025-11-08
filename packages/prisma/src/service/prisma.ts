@@ -10,8 +10,8 @@ import { file } from 'bun';
 @Service()
 export default class PrismaService extends BaseService {
 	@Inject('@prisma:config') private config?: IConfig;
-	private prismaFolderPath = resolve(process.cwd(), './prisma');
 	private importPath: string | null = null;
+	private schemaFilePath!: string;
 	private prisma?: IPrismaClient;
 
 	public async init() {
@@ -31,12 +31,13 @@ export default class PrismaService extends BaseService {
 			if (!output || output.type !== 'assignment' || !output.value) {
 				this.importPath = '@prisma/client';
 			} else {
-				this.importPath = resolve(this.prismaFolderPath, String(output.value).replaceAll('\"', ''));
+				const schemaStructure = resolve(this.schemaFilePath, '..', String(output.value).replaceAll('\"', ''));
+				this.importPath = resolve(schemaStructure, String(output.value).replaceAll('\"', ''));
 			}
 		}
 
 		// Import the prisma module dynamically.
-		const prismaModule = await import(this.importPath);
+		const prismaModule = await import(this.importPath!);
 		if (!prismaModule || !prismaModule.PrismaClient) {
 			throw new Error(`Prisma client not found at: ${this.importPath}`);
 		}
@@ -66,8 +67,9 @@ export default class PrismaService extends BaseService {
 	}
 
 	private async getSchemaFile() {
-		const defaultSchemaFilePath = resolve(this.prismaFolderPath, './schema.prisma');
+		const defaultSchemaFilePath = resolve(process.cwd(), './prisma/schema.prisma');
 		const schemaFilePath = this.config?.schemaFileLocation ?? defaultSchemaFilePath;
+		this.schemaFilePath = schemaFilePath;
 		const schemaHandle = file(schemaFilePath);
 		if (await schemaHandle.exists()) {
 			return schemaHandle;

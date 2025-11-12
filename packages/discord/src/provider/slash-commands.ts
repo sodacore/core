@@ -155,13 +155,17 @@ export default class SlashCommandsProvider {
 				const builderOptions: IDiscordOptionsCommand = Utils.getMeta('options', 'discord')(controller.constructor, undefined, {});
 				if (!builderOptions || !builderOptions.name) return null;
 
-				const methods: IRouterControllerMethodItem[] = Utils.getMeta('methods', 'discord')(controller, undefined, []);
-				methods.forEach(method => {
-					const subCommand = Utils.getMeta<IDiscordOptionsSubCommand | null>('subcommand', 'discord')(controller, method.key, null);
-					if (!subCommand) throw new Error(`Method ${method.key} is missing a subcommand definition.`);
-					method.subCommand = subCommand;
-					method.options = Utils.getMeta<IDiscordOptionsGroup[]>('options', 'discord')(controller, method.key, []).reverse();
-				});
+				const methods = Utils.getMeta<IRouterControllerMethodItem[]>('methods', 'discord')(controller, undefined, [])
+					.map(method => {
+						const subCommand = Utils.getMeta<IDiscordOptionsSubCommand | null>('subcommand', 'discord')(controller, method.key, null);
+						if (!subCommand) return null;
+						return {
+							...method,
+							subCommand,
+							options: Utils.getMeta<IDiscordOptionsGroup[]>('options', 'discord')(controller, method.key, []).reverse(),
+						};
+					})
+					.filter(Boolean) as IRouterControllerMethodItem[];
 
 				return toBuilder(builderOptions, methods).toJSON();
 			};

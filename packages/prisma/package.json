@@ -61,12 +61,12 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@mrleebo/prisma-ast": "^0.13.0",
-		"@prisma/client": "^6.17.1",
+		"@mrleebo/prisma-ast": "^0.13.1",
+		"@prisma/client": "^6.19.0",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"prisma": "^6.17.1",
+		"prisma": "^6.19.0",
 		"reflect-metadata": "^0.2.2"
 	}
 }

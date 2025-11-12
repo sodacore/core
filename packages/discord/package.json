@@ -62,7 +62,7 @@
 		"@sodacore/di": "workspace:*",
 		"@sodacore/http": "workspace:*",
 		"@sodacore/registry": "workspace:*",
-		"discord.js": "^14.23.2",
+		"discord.js": "^14.24.2",
 		"reflect-metadata": "^0.2.2",
 		"uuid": "^13.0.0"
 	}

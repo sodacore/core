@@ -183,3 +183,37 @@ export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
 		sizes[maxPow]
 	}`;
 }
+
+/**
+ * The stripIndent function is used to remove leading
+ * indentation from multi-line strings.
+ * @param value The value to strip.
+ * @returns string
+ */
+export function stripIndent(value: string) {
+	const match = value.match(/^[ \t]*(?=\S)/gm);
+	if (!match) return value;
+
+	let minIndent = Number.POSITIVE_INFINITY;
+	for (const indent of match) {
+		minIndent = Math.min(minIndent, indent.length);
+	}
+
+	if (minIndent === 0 || minIndent === Number.POSITIVE_INFINITY) {
+		return value;
+	}
+
+	return value.replace(new RegExp(`^[ \\t]{${minIndent}}`, 'gm'), '');
+}
+
+/**
+ * The dedent function is used to remove leading and trailing
+ * whitespace-only lines from a multi-line string, and then
+ * strip the indentation.
+ * @param value The string to dedent.
+ * @returns string
+ */
+export function dedent(value: string) {
+	const trimmed = value.replace(/^(?:[ \t]*\r?\n)+|(?:\r?\n[ \t]*)+$/g, '');
+	return stripIndent(trimmed);
+}

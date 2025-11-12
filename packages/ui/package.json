@@ -1,15 +1,15 @@
 {
-	"name": "@sodacore/ws",
-	"description": "Sodacore ws is a core plugin that extends the Http plugin offering WebSocket support to the Sodacore framework.",
-	"version": "0.4.3",
+	"name": "@sodacore/ui",
+	"description": "Sodacore UI is a core plugin offering a UI builder using a programmatic approach.",
+	"version": "0.4.2",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",
 	"type": "module",
 	"main": "dist/index.js",
-	"private": false,
+	"private": true,
 	"publishConfig": {
-		"access": "public"
+		"access": "restricted"
 	},
 	"keywords": [
 		"bun",
@@ -21,10 +21,9 @@
 		"decorator",
 		"typescript",
 		"engine",
-		"ws",
-		"wss",
-		"websocket",
-		"websockets"
+		"ui",
+		"frontend",
+		"user-interface"
 	],
 	"files": [
 		"dist"
@@ -41,14 +40,14 @@
 	"engines": {
 		"bun": ">=1.2.23"
 	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sodacore/core.git",
-		"directory": "packages/ws"
+		"directory": "packages/ui"
+	},
+	"scripts": {
+		"build": "tsc",
+		"build:watch": "tsc --watch"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
@@ -57,9 +56,9 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
+		"@awesome.me/webawesome": "^3.0.0",
 		"@sodacore/core": "workspace:*",
 		"@sodacore/di": "workspace:*",
-		"@sodacore/http": "workspace:*",
 		"@sodacore/registry": "workspace:*",
 		"reflect-metadata": "^0.2.2",
 		"uuid": "^13.0.0"

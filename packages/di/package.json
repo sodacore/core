@@ -1,7 +1,7 @@
 {
 	"name": "@sodacore/di",
 	"description": "Sodacore dependency injection is a core module for the Sodacore framework offering dependecy injection support.",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"license": "Apache-2.0",
 	"homepage": "https://sodacore.dev",
 	"module": "false",
